@@ -1,0 +1,1577 @@
+/* =============================================================================
+   porpass.css — PORPASS site-wide styles
+   Requires: Bootstrap 5, DM Serif Display + DM Sans (loaded via layout head)
+   ============================================================================= */
+
+/* ── CSS Variables ─────────────────────────────────────────────────────────── */
+:root {
+    --teal-900: #04342C;
+    --teal-800: #085041;
+    --teal-700: #0F6E56;
+    --teal-500: #1D9E75;
+    --teal-400: #5DCAA5;
+    --teal-200: #9FE1CB;
+    --teal-100: #E1F5EE;
+    --amber:    #EF9F27;
+    --amber-dk: #BA7517;
+    --text-primary: #1a1a18;
+    --text-muted:   #5a5a56;
+    --border:       rgba(0,0,0,0.08);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: #fff;
+    margin: 0;
+}
+
+/* ── Navbar ────────────────────────────────────────────────────────────────── */
+.pp-navbar {
+    background: var(--teal-900);
+    padding: 0.75rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--teal-800);
+}
+.pp-navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.pp-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+}
+.pp-nav-wordmark {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: var(--teal-400);
+}
+.pp-nav-signin {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: var(--teal-200);
+    border: 1px solid var(--teal-700);
+    border-radius: 4px;
+    padding: 0.35rem 1rem;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+.pp-nav-signin:hover {
+    background: var(--teal-700);
+    color: #fff;
+}
+/* ── Nav links for authenticated pages */
+.pp-nav-link {
+    font-size: 0.85rem;
+    color: var(--teal-200);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    transition: background 0.2s, color 0.2s;
+}
+.pp-nav-link:hover,
+.pp-nav-link.active {
+    background: var(--teal-800);
+    color: #fff;
+}
+
+/* ── App navbar (Bootstrap-based, for authenticated pages) ─────────────────── */
+.pp-app-nav {
+    background: var(--teal-900);
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--teal-800);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.pp-app-nav .navbar-brand {
+    color: var(--teal-400);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.pp-app-nav .navbar-brand:hover {
+    color: var(--teal-200);
+}
+.pp-app-nav .nav-link {
+    color: var(--teal-200);
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    padding: 0.4rem 0.85rem;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+}
+.pp-app-nav .nav-link:hover,
+.pp-app-nav .nav-link:focus,
+.pp-app-nav .nav-link.active,
+.pp-app-nav .nav-link.show {
+    color: #fff;
+    background: var(--teal-800);
+}
+.pp-app-nav .navbar-toggler {
+    border: 1px solid var(--teal-700);
+    padding: 0.3rem 0.6rem;
+}
+.pp-app-nav .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.25);
+}
+.pp-app-nav .dropdown-menu {
+    background: var(--teal-800);
+    border: 1px solid var(--teal-700);
+    padding: 0.4rem 0;
+    border-radius: 6px;
+    margin-top: 0.4rem;
+    min-width: 12rem;
+}
+.pp-app-nav .dropdown-item {
+    color: var(--teal-100);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 0.45rem 1rem;
+    transition: background 0.15s, color 0.15s;
+}
+.pp-app-nav .dropdown-item:hover,
+.pp-app-nav .dropdown-item:focus {
+    background: var(--teal-700);
+    color: #fff;
+}
+.pp-app-nav .dropdown-divider {
+    border-top: 1px solid var(--teal-700);
+    margin: 0.4rem 0;
+}
+
+/* ── Hero ──────────────────────────────────────────────────────────────────── */
+.pp-hero {
+    background: var(--teal-900);
+    color: #fff;
+    padding: 5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+.pp-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(29,158,117,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,158,117,0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+.pp-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.pp-hero-logo {
+    width: min(600px, 90vw);
+    margin-bottom: 2rem;
+}
+.pp-hero-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--teal-200);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.01em;
+}
+.pp-hero-rule {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+}
+
+/* ── Page header (for interior pages) ─────────────────────────────────────── */
+.pp-page-header {
+    background: var(--teal-900);
+    padding: 2.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.pp-page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(29,158,117,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,158,117,0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+.pp-page-header-inner {
+    position: relative;
+    z-index: 1;
+}
+.pp-page-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--teal-400);
+    margin: 0 0 0.25rem;
+}
+.pp-page-subtitle {
+    font-size: 0.85rem;
+    color: var(--teal-200);
+    margin: 0;
+    font-weight: 300;
+}
+
+/* ── Sections ──────────────────────────────────────────────────────────────── */
+.pp-section {
+    padding: 4rem 0;
+}
+.pp-section + .pp-section {
+    border-top: 1px solid var(--border);
+}
+.pp-section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal-500);
+    margin-bottom: 0.5rem;
+}
+.pp-section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    line-height: 1.2;
+}
+.pp-lead {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 720px;
+}
+
+/* ── Figure / radargram ────────────────────────────────────────────────────── */
+.pp-figure {
+    margin: 2.5rem 0 0;
+}
+.pp-figure img {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    display: block;
+}
+.pp-figure figcaption {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.pp-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+.pp-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pp-card:hover {
+    border-color: var(--teal-400);
+    box-shadow: 0 4px 20px rgba(29,158,117,0.08);
+}
+.pp-card--app {
+    border-top: 3px solid var(--amber);
+}
+.pp-card-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal-700);
+    background: var(--teal-100);
+    border-radius: 3px;
+    padding: 0.2rem 0.55rem;
+    margin-bottom: 0.75rem;
+}
+.pp-card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    margin-bottom: 0.6rem;
+}
+.pp-card-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+.pp-card-title a:hover {
+    color: var(--teal-500);
+}
+.pp-card-body {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+/* ── Panels (static card variant, no hover) ────────────────────────────────── */
+.pp-panel {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    background: #fff;
+}
+.pp-panel-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: 0 0 1.25rem;
+}
+.pp-panel--success { border-top: 3px solid var(--teal-500); }
+.pp-panel--warning { border-top: 3px solid var(--amber); }
+.pp-panel--danger  { border-top: 3px solid #d04040; }
+
+/* ── Narrow centered container (for form pages) ────────────────────────────── */
+.pp-container-narrow {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.pp-btn {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 0.7rem 1.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+.pp-btn-primary {
+    background: var(--teal-500);
+    color: #fff;
+}
+.pp-btn-primary:hover {
+    background: var(--teal-700);
+    color: #fff;
+}
+.pp-btn-outline {
+    background: transparent;
+    color: var(--teal-500);
+    border: 1px solid var(--teal-500);
+}
+.pp-btn-outline:hover {
+    background: var(--teal-100);
+    color: var(--teal-700);
+}
+.pp-btn-lg {
+    font-size: 1rem;
+    padding: 0.85rem 2.25rem;
+}
+
+/* Semantic button colors for admin actions */
+.pp-btn-success {
+    background: #1F8F65;
+    color: #fff;
+}
+.pp-btn-success:hover {
+    background: #186F4F;
+    color: #fff;
+}
+.pp-btn-danger {
+    background: #C04848;
+    color: #fff;
+}
+.pp-btn-danger:hover {
+    background: #9D3838;
+    color: #fff;
+}
+
+/* Small input variant for dense table cells */
+.pp-input--sm {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.82rem;
+    height: auto;
+    min-height: 30px;
+}
+
+/* ── CTA band ──────────────────────────────────────────────────────────────── */
+.pp-cta-band {
+    background: var(--teal-100);
+    border-radius: 8px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.pp-cta-band-text h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.35rem;
+}
+.pp-cta-band-text p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+.pp-cta-band .pp-btn {
+    flex-shrink: 0;
+}
+
+/* ── Form elements ─────────────────────────────────────────────────────────── */
+.pp-field {
+    margin-bottom: 1.1rem;
+}
+.pp-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.pp-field-row .pp-field {
+    margin-bottom: 0;
+}
+.pp-required {
+    color: var(--amber-dk);
+    font-weight: 500;
+    margin-left: 2px;
+}
+.pp-field-error {
+    font-size: 0.78rem;
+    color: #a33;
+    margin-top: 0.35rem;
+}
+.pp-field-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+}
+.pp-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+.pp-input,
+.pp-select,
+.pp-textarea {
+    width: 100%;
+    padding: 0.65rem 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pp-input:focus,
+.pp-select:focus,
+.pp-textarea:focus {
+    border-color: var(--teal-500);
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+}
+.pp-input.is-invalid,
+.pp-select.is-invalid,
+.pp-textarea.is-invalid {
+    border-color: #e07070;
+    background-image: none;
+}
+.pp-input.is-invalid:focus,
+.pp-select.is-invalid:focus,
+.pp-textarea.is-invalid:focus {
+    border-color: #d04040;
+    box-shadow: 0 0 0 3px rgba(208,64,64,0.12);
+}
+.pp-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+.pp-btn-submit {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--teal-500);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+}
+.pp-btn-submit:hover {
+    background: var(--teal-700);
+}
+
+/* ── Alerts ────────────────────────────────────────────────────────────────── */
+.pp-alert {
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+.pp-alert-danger {
+    background: #fff3f3;
+    border: 1px solid #f0c0c0;
+    color: #a33;
+}
+.pp-alert-success {
+    background: var(--teal-100);
+    border: 1px solid var(--teal-400);
+    color: var(--teal-700);
+}
+.pp-alert-warning {
+    background: #fff8ec;
+    border: 1px solid #f5d08a;
+    color: var(--amber-dk);
+}
+.pp-alert-info {
+    background: var(--teal-100);
+    border: 1px solid var(--teal-400);
+    color: var(--teal-800);
+}
+.pp-alert a {
+    color: var(--teal-700);
+}
+
+/* ── Account / info pages ─────────────────────────────────────────────────── */
+.pp-info-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.75rem 1.25rem;
+    margin: 0;
+    font-size: 0.88rem;
+}
+.pp-info-grid dt {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+.pp-info-grid dd {
+    margin: 0;
+    color: var(--text-primary);
+}
+.pp-current-value {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+}
+.pp-current-value strong {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+.pp-container-medium {
+    max-width: 760px;
+    margin: 0 auto;
+}
+.pp-btn-sm {
+    font-size: 0.82rem;
+    padding: 0.55rem 1.25rem;
+}
+
+/* ── Utility links ─────────────────────────────────────────────────────────── */
+.pp-form-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.1rem;
+}
+.pp-form-links a {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+}
+.pp-form-links a:hover {
+    color: var(--teal-500);
+    border-bottom-color: var(--teal-400);
+}
+
+/* ── Divider ───────────────────────────────────────────────────────────────── */
+.pp-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+.pp-divider::before,
+.pp-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* ── Resources list ────────────────────────────────────────────────────────── */
+.pp-resources {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.pp-resources li::before {
+    content: '→';
+    color: var(--teal-500);
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+}
+.pp-resources a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s, color 0.15s;
+}
+.pp-resources a:hover {
+    color: var(--teal-500);
+    border-bottom-color: var(--teal-400);
+}
+
+/* ── Team text ─────────────────────────────────────────────────────────────── */
+.pp-team-text {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 760px;
+}
+
+/* ── Page title row (heading + actions) ───────────────────────────────────── */
+.pp-page-title-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+.pp-page-title-row-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+.pp-page-title-large {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    margin: 0;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+.pp-badge-admin {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--amber-dk);
+    border-radius: 3px;
+    padding: 0.2rem 0.55rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    line-height: 1.5;
+}
+
+/* ── Stat cards (metric tiles) ────────────────────────────────────────────── */
+.pp-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.pp-stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+}
+.pp-stat-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--teal-700);
+    margin: 0;
+}
+.pp-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    margin-top: 0.35rem;
+}
+.pp-stat-meta {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+.pp-stat-card--accent { border-top: 3px solid var(--teal-500); }
+.pp-stat-card--amber  { border-top: 3px solid var(--amber); }
+
+/* ── Panel header (title + actions inside a panel) ────────────────────────── */
+.pp-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+.pp-panel-header-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0;
+}
+.pp-panel-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.pp-panel--flush {
+    padding: 0;
+    overflow: hidden;
+}
+.pp-panel--flush > .pp-panel-body {
+    padding: 1.5rem;
+}
+
+/* ── Tables ───────────────────────────────────────────────────────────────── */
+.pp-table-wrap {
+    overflow-x: auto;
+}
+.pp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+}
+.pp-table thead th {
+    background: var(--teal-100);
+    color: var(--teal-800);
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+.pp-table tbody td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    color: var(--text-primary);
+}
+.pp-table tbody tr:last-child td { border-bottom: none; }
+.pp-table tbody tr:hover { background: rgba(29,158,117,0.03); }
+.pp-table code {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.8rem;
+    color: var(--teal-700);
+    background: none;
+    padding: 0;
+}
+
+/* ── Accordion tables (admin: users, change requests, announcements) ───────── */
+.pp-table tbody tr.user-row { cursor: pointer; }
+.pp-table tbody tr.table-active,
+.pp-table tbody tr.table-active:hover { background: var(--teal-100); }
+.pp-accordion-panel {
+    padding: 1.5rem 2rem;
+    background: #faf9f6;
+    border-bottom: 1px solid var(--border);
+}
+.pp-accordion-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+}
+
+/* ── Badges (status indicators) ───────────────────────────────────────────── */
+.pp-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.55rem;
+    border-radius: 3px;
+    line-height: 1.4;
+}
+.pp-badge-success { background: var(--teal-100); color: var(--teal-800); }
+.pp-badge-info    { background: #e0eefb; color: #185fa5; }
+.pp-badge-warning { background: #fff3da; color: var(--amber-dk); }
+.pp-badge-danger  { background: #fceeee; color: #a33; }
+.pp-badge-muted   { background: #f1efe8; color: #5f5e5a; }
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.pp-empty {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+.pp-empty a {
+    color: var(--teal-500);
+    text-decoration: none;
+    font-weight: 500;
+}
+.pp-empty a:hover { text-decoration: underline; }
+
+/* ── Status dots (for service health) ─────────────────────────────────────── */
+.pp-status-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.pp-status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+.pp-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.pp-status-dot--up   { background: var(--teal-500); box-shadow: 0 0 0 3px rgba(29,158,117,0.18); }
+.pp-status-dot--down { background: #d04040; box-shadow: 0 0 0 3px rgba(208,64,64,0.18); }
+.pp-status-name { font-size: 0.88rem; font-weight: 500; }
+.pp-status-detail { font-size: 0.78rem; color: var(--text-muted); }
+.pp-status-detail--up   { color: var(--teal-700); }
+.pp-status-detail--down { color: #a33; }
+
+/* ── Small/inline form controls ───────────────────────────────────────────── */
+.pp-select--sm {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.82rem;
+    width: auto;
+    display: inline-block;
+}
+
+/* ── Icon button ──────────────────────────────────────────────────────────── */
+.pp-btn-icon {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 4px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.pp-btn-icon:hover {
+    background: var(--teal-100);
+    color: var(--teal-700);
+    border-color: var(--teal-400);
+}
+
+/* ── Announcement (info notice) ───────────────────────────────────────────── */
+.pp-announcement {
+    background: var(--teal-100);
+    border-left: 3px solid var(--teal-500);
+    border-radius: 4px;
+    padding: 0.9rem 1.25rem;
+    margin-bottom: 0.75rem;
+}
+.pp-announcement-title {
+    font-weight: 500;
+    color: var(--teal-800);
+    font-size: 0.92rem;
+}
+.pp-announcement-date {
+    font-size: 0.78rem;
+    color: var(--teal-700);
+    margin-left: 0.5rem;
+    font-weight: 400;
+}
+.pp-announcement-body {
+    margin-top: 0.4rem;
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+/* ── Pending-actions banner ───────────────────────────────────────────────── */
+.pp-pending-banner {
+    background: #fff8ec;
+    border-left: 3px solid var(--amber);
+    border-radius: 4px;
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.25rem;
+}
+.pp-pending-banner-label {
+    font-weight: 500;
+    color: var(--amber-dk);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    margin-right: 0.25rem;
+}
+.pp-pending-banner a {
+    color: var(--amber-dk);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+}
+.pp-pending-banner a:hover {
+    border-bottom-color: var(--amber-dk);
+}
+
+/* ── Section spacing (for stacked panels in app pages) ────────────────────── */
+.pp-stack > * + * {
+    margin-top: 1.5rem;
+}
+
+/* ── Admin chart grid (2x2 responsive grid for chart panels) ──────────────── */
+.pp-admin-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 1.5rem;
+}
+
+/* ── Docs landing — coming-soon card variant ──────────────────────────────── */
+.pp-card--placeholder {
+    background: #fafaf8;
+    border-style: dashed;
+    border-color: var(--border);
+    pointer-events: none;
+}
+.pp-card--placeholder:hover {
+    border-color: var(--border);
+    box-shadow: none;
+}
+.pp-card--placeholder .pp-card-title {
+    color: var(--text-muted);
+}
+.pp-card-footer {
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--teal-500);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+.pp-card-footer--muted {
+    color: var(--text-muted);
+}
+
+/* ── Docs section heading (h2-style on landing page) ──────────────────────── */
+.pp-docs-section-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ── Docs page layout (sidebar + main) ────────────────────────────────────── */
+.pp-docs-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+.pp-docs-sidebar {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+}
+.pp-docs-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+.pp-docs-nav-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-700);
+    margin: 0.75rem 0 0.5rem;
+}
+.pp-docs-nav-label:first-child { margin-top: 0; }
+.pp-docs-nav-link {
+    display: block;
+    padding: 0.4rem 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    transition: color 0.15s, border-color 0.15s;
+}
+.pp-docs-nav-link:hover {
+    color: var(--teal-700);
+}
+.pp-docs-nav-link.active {
+    color: var(--teal-700);
+    border-left-color: var(--teal-500);
+    font-weight: 500;
+}
+.pp-docs-nav-back {
+    display: inline-block;
+    padding: 0.3rem 0;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+    transition: color 0.15s;
+}
+.pp-docs-nav-back:hover { color: var(--teal-500); }
+.pp-docs-nav-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.5rem 0;
+}
+
+/* Main docs content column */
+.pp-docs-content {
+    min-width: 0;
+}
+.pp-docs-content h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    scroll-margin-top: 80px;
+}
+.pp-docs-content h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--teal-700);
+    margin: 1.75rem 0 0.75rem;
+}
+.pp-docs-content h3:first-of-type { margin-top: 0; }
+.pp-docs-section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 80px;
+}
+.pp-docs-content p {
+    line-height: 1.7;
+    margin: 0 0 1rem;
+}
+.pp-docs-content a {
+    color: var(--teal-500);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+}
+.pp-docs-content a:hover {
+    border-bottom-color: var(--teal-400);
+}
+
+/* ── External link buttons (PDS archive, etc.) ────────────────────────────── */
+.pp-link-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+}
+.pp-link-btn {
+    display: inline-block;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.pp-link-btn:hover {
+    background: var(--teal-100);
+    color: var(--teal-700);
+    border-color: var(--teal-400);
+}
+
+/* ── Spec table (instrument technical specs) ──────────────────────────────── */
+.pp-spec-table {
+    width: 100%;
+    max-width: 480px;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0;
+}
+.pp-spec-table th {
+    background: var(--teal-100);
+    color: var(--teal-800);
+    font-weight: 500;
+    text-align: left;
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    width: 45%;
+    white-space: nowrap;
+}
+.pp-spec-table td {
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+.pp-spec-table tbody tr:last-child th,
+.pp-spec-table tbody tr:last-child td { border-bottom: none; }
+
+/* ── Science highlight list ───────────────────────────────────────────────── */
+.pp-highlight-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.pp-highlight-item {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.pp-highlight-item:first-child { padding-top: 0; }
+.pp-highlight-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+.pp-highlight-item-title {
+    color: var(--teal-700);
+    font-weight: 500;
+}
+
+/* ── Reference paragraph (citation) ───────────────────────────────────────── */
+.pp-reference {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0.75rem 0 0;
+    padding-left: 0.85rem;
+    border-left: 2px solid var(--border);
+}
+.pp-reference strong { color: var(--text-primary); font-weight: 500; }
+.pp-reference em { color: var(--text-primary); }
+.pp-reference a {
+    color: var(--teal-500);
+    text-decoration: none;
+    word-break: break-all;
+}
+.pp-reference a:hover { text-decoration: underline; }
+
+/* Responsive: stack the docs layout on small screens */
+@media (max-width: 900px) {
+    .pp-docs-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .pp-docs-sidebar {
+        position: static;
+    }
+}
+
+/* ── Filter form (dense filter grids for browse/data pages) ───────────────── */
+.pp-filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+.pp-filter-row:last-child { margin-bottom: 0; }
+.pp-filter-cell {
+    min-width: 0;
+}
+.pp-filter-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.35rem;
+}
+.pp-range-group {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.pp-range-group > .pp-input {
+    flex: 1;
+    min-width: 0;
+}
+.pp-range-group-sep {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    font-size: 0.85rem;
+}
+
+/* ── Checkbox (inline group, modern accent-color styling) ─────────────────── */
+.pp-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 0.9rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+}
+.pp-checkbox input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--teal-500);
+    cursor: pointer;
+    margin: 0;
+}
+.pp-checkbox input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.pp-checkbox input[type="checkbox"]:disabled + span {
+    color: var(--text-muted);
+}
+
+/* ── Collapsible toggle (for bbox section etc.) ───────────────────────────── */
+.pp-collapsible-toggle {
+    display: inline-block;
+    color: var(--teal-700);
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.15s;
+}
+.pp-collapsible-toggle:hover {
+    color: var(--teal-500);
+}
+
+/* ── Filter sub-section (instrument-specific) ─────────────────────────────── */
+.pp-filter-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+.pp-filter-section-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-700);
+    margin: 0 0 1rem;
+}
+
+/* ── Form action row (submit / reset) ─────────────────────────────────────── */
+.pp-form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ── Sortable column headers in pp-table ──────────────────────────────────── */
+.pp-table thead .sort-link {
+    color: var(--teal-800);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+}
+.pp-table thead .sort-link:hover {
+    color: var(--teal-900);
+}
+.pp-table thead .sort-indicator {
+    font-size: 0.65em;
+    opacity: 0.8;
+}
+
+/* ── Panel footer (for pagination, etc.) ──────────────────────────────────── */
+.pp-panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--color-background-secondary, #fafaf8);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+/* ── Pagination ───────────────────────────────────────────────────────────── */
+.pp-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.pp-pagination li { display: inline-block; }
+.pp-page-link {
+    display: inline-block;
+    padding: 0.32rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--teal-700);
+    font-size: 0.82rem;
+    text-decoration: none;
+    min-width: 32px;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.pp-page-link:hover {
+    background: var(--teal-100);
+    border-color: var(--teal-400);
+    color: var(--teal-800);
+}
+.pp-pagination li.active .pp-page-link {
+    background: var(--teal-500);
+    color: #fff;
+    border-color: var(--teal-500);
+    cursor: default;
+}
+.pp-pagination li.active .pp-page-link:hover {
+    background: var(--teal-500);
+    border-color: var(--teal-500);
+    color: #fff;
+}
+.pp-pagination li.disabled .pp-page-link {
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.45;
+    background: transparent;
+    border-color: transparent;
+}
+.pp-pagination li.disabled .pp-page-link:hover {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-muted);
+}
+
+/* ── Login split layout ────────────────────────────────────────────────────── */
+.pp-login-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+.pp-brand-panel {
+    background: var(--teal-900);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 3.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.pp-brand-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(29,158,117,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,158,117,0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+.pp-brand-panel::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+}
+.pp-brand-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+}
+.pp-brand-wordmark {
+    width: 100%;
+    max-width: 360px;
+}
+.pp-brand-desc {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--teal-400);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    max-width: 280px;
+}
+.pp-brand-footer {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--teal-800);
+    letter-spacing: 0.05em;
+}
+.pp-form-panel {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 3.5rem;
+}
+.pp-form-inner {
+    width: 100%;
+    max-width: 360px;
+}
+.pp-form-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+}
+.pp-form-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────────── */
+.pp-footer {
+    background: var(--teal-700);
+    color: var(--teal-100);
+    padding: 3rem 0 2rem;
+    border-top: 3px solid var(--teal-500);
+}
+.pp-footer-inner {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+.pp-footer-logo img {
+    max-height: 90px;
+    opacity: 0.95;
+}
+.pp-footer-text p {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin: 0 0 0.4rem;
+    color: var(--teal-100);
+}
+.pp-footer-text .pp-footer-small {
+    font-size: 0.75rem;
+    color: var(--teal-200);
+    margin-top: 0.75rem;
+}
+.pp-footer-divider {
+    border: none;
+    border-top: 1px solid var(--teal-500);
+    margin: 1.5rem 0 1rem;
+}
+.pp-footer-bottom {
+    font-size: 0.75rem;
+    color: var(--teal-200);
+    letter-spacing: 0.05em;
+}
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.pp-hero-inner > * {
+    animation: fadeUp 0.7s ease both;
+}
+.pp-hero-inner > *:nth-child(1) { animation-delay: 0.05s; }
+.pp-hero-inner > *:nth-child(2) { animation-delay: 0.20s; }
+.pp-hero-inner > *:nth-child(3) { animation-delay: 0.35s; }
+
+.pp-brand-content { animation: fadeUp 0.6s ease both; }
+.pp-form-inner    { animation: fadeUp 0.6s 0.1s ease both; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+    .pp-login-wrap {
+        grid-template-columns: 1fr;
+    }
+    .pp-brand-panel {
+        padding: 2.5rem 2rem;
+        min-height: 220px;
+    }
+    .pp-brand-desc { display: none; }
+    .pp-form-panel {
+        padding: 2.5rem 1.5rem;
+    }
+}
+@media (max-width: 640px) {
+    .pp-footer-inner { grid-template-columns: 1fr; }
+    .pp-section-title { font-size: 1.5rem; }
+    .pp-field-row { grid-template-columns: 1fr; }
+    .pp-panel { padding: 1.5rem; }
+    .pp-info-grid { grid-template-columns: 1fr; gap: 0.2rem 0; }
+    .pp-info-grid dt { margin-top: 0.6rem; }
+    .pp-info-grid dt:first-child { margin-top: 0; }
+}
+
+.pp-file-links { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+.pp-file-link {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem; letter-spacing: 0.02em;
+    padding: 0.1rem 0.45rem; border-radius: 4px;
+    border: 1px solid var(--teal, #1f6f6f);
+    color: var(--teal, #1f6f6f); text-decoration: none;
+}
+.pp-file-link:hover { background: var(--teal, #1f6f6f); color: #fff; }
+.pp-file-sep { display: none; }   /* gap handles spacing when chips are used */

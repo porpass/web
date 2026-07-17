@@ -1,0 +1,42 @@
+<svg width="680" height="160" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>PORPASS wordmark logo</title>
+  <desc>PORPASS wordmark centered with radar waveform glyphs on either side, teal and amber color scheme</desc>
+
+  <!-- Left waveform — primary trace (teal) -->
+  <polyline
+    points="52,72 72,72 79,55 87,91 95,65 102,80 109,72 129,72"
+    fill="none" stroke="#1D9E75" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Left subsurface echo (amber) -->
+  <polyline
+    points="66,82 74,82 80,91 88,72 96,84 103,77 110,82 124,82"
+    fill="none" stroke="#EF9F27" stroke-width="1.4"
+    stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+
+  <!-- PORPASS wordmark, centered -->
+  <text x="340" y="82"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, sans-serif" font-size="44" font-weight="500"
+    letter-spacing="7" fill="#1D9E75">PORPASS</text>
+
+  <!-- Right waveform — mirrored primary trace (teal) -->
+  <polyline
+    points="551,72 571,72 578,80 585,65 593,91 601,55 609,72 628,72"
+    fill="none" stroke="#1D9E75" stroke-width="2.2"
+    stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Right subsurface echo (amber) -->
+  <polyline
+    points="556,82 570,82 577,77 584,84 592,72 600,91 606,82 614,82"
+    fill="none" stroke="#EF9F27" stroke-width="1.4"
+    stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+
+  <!-- Subtitle -->
+  <text x="340" y="114"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, sans-serif" font-size="10" letter-spacing="2.2"
+    fill="#5DCAA5" opacity="0.85">PLANETARY ORBITAL RADAR PROCESSING &amp; SIMULATION SYSTEM</text>
+
+  <!-- Rule lines flanking subtitle -->
+  <line x1="52"  y1="106" x2="148" y2="106" stroke="#5DCAA5" stroke-width="0.5" opacity="0.4"/>
+  <line x1="532" y1="106" x2="628" y2="106" stroke="#5DCAA5" stroke-width="0.5" opacity="0.4"/>
+</svg>

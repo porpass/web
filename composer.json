@@ -1,0 +1,17 @@
+{
+    "name": "porpass/web",
+    "description": "PORPASS web application — browse, configure, and submit planetary orbital radar processing jobs (SHARAD, MARSIS, LRS).",
+    "version": "0.1.0a1",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "homepage": "https://github.com/porpass/web",
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "phpmailer/phpmailer": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "porpass\\": "src/"
+        }
+    }
+}

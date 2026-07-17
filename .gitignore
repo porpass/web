@@ -1,0 +1,40 @@
+grasp-docs/
+# Map Tiles
+public/tiles
+
+# Other
+logs/
+
+# PHP / project
+.env
+*.log
+vendor/
+node_modules/
+
+ 
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+ 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.iml
+*.iws
+*.ipr
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.venv/
+venv/
+**/.ipynb_checkpoints
+*.ipynb

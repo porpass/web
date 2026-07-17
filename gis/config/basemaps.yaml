@@ -1,0 +1,109 @@
+# Basemap configuration
+# To switch to local MBTiles: change source_type from "wms" to "mbtiles"
+# and set url to the local file path. No code changes required.
+
+mars:
+  cylindrical:
+    label: "Mars Cylindrical"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/mars_simp_cyl.map"
+    layers:
+      - id: MOLA_color
+        label: "MOLA Color"
+        type: topo
+      - id: MOLA_bw
+        label: "MOLA Hillshade"
+        type: topo
+      - id: MDIM21
+        label: "MDIM 2.1"
+        type: image
+      - id: HRSC_MOLA_Blend_Hillshade
+        label: "HRSC/MOLA Blend Hillshade"
+        type: topo
+
+  polar_north:
+    label: "Mars North Polar"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/mars_npole.map"
+    layers:
+      - id: MOLA_color_north
+        label: "MOLA Color"
+        type: topo
+      - id: MDIM21_north
+        label: "MDIM 2.1"
+        type: image
+        note: "Partial coverage only"
+      - id: MOLA_bw_north
+        label: "MOLA Hillshade"
+        type: topo
+      
+
+  polar_south:
+    label: "Mars South Polar"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/mars_spole.map"
+    layers:
+      - id: MOLA_color_south
+        label: "MOLA Color"
+        type: topo
+      - id: MDIM21_south
+        label: "MDIM 2.1"
+        type: image
+        note: "Partial coverage only"
+      - id: MOLA_bw_south
+        label: "MOLA Hillshade"
+        type: topo
+      
+
+phobos:
+  cylindrical:
+    label: "Phobos Cylindrical"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/phobos_simp_cyl.map"
+    layers:
+      - id: VIKING
+        label: "Viking Shaded Relief"
+        type: image
+
+moon:
+  cylindrical:
+    label: "Moon Cylindrical"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_simp_cyl.map"
+    layers:
+      - id: LROC_WAC
+        label: "LROC WAC"
+        type: image
+      - id: KaguyaTC_Ortho
+        label: "Kaguya TC Ortho"
+        type: image
+      - id: LOLA_color
+        label: "LOLA Color"
+        type: topo
+      - id: LOLA_bw
+        label: "LOLA Greyscale"
+        type: topo
+
+  polar_north:
+    label: "Moon North Polar"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_npole.map"
+    layers:
+      - id: LRO_WAC_north
+        label: "LROC WAC"
+        type: image
+      - id: LOLA_north
+        label: "LOLA"
+        type: topo
+
+  polar_south:
+    label: "Moon South Polar"
+    source_type: wms
+    url: "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/earth/moon_spole.map"
+    layers:
+      - id: LRO_WAC_south
+        label: "LROC WAC"
+        type: image
+      - id: LOLA_south
+        label: "LOLA"
+        type: topo

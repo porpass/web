@@ -1,0 +1,1250 @@
+{
+  "schema_version": "1.1",
+  "grasp_version": "0.6.0a1",
+  "generated_at": "2026-07-07T20:43:53.637180+00:00",
+  "instrument": "MARSIS",
+  "product": "EDR",
+  "target_body": "MARS",
+  "inputs": {
+    "label_file": {
+      "required": true,
+      "help": "PDS label (PDS3/PDS4)"
+    },
+    "science_file": {
+      "required": true,
+      "help": "PDS science file"
+    },
+    "auxiliary_file": {
+      "required": true,
+      "help": "PDS auxiliary file"
+    }
+  },
+  "stages": [
+    {
+      "key": "preprocessing",
+      "dataclass": "PreprocessingParams",
+      "supported": true,
+      "title": "Preprocessing",
+      "help": "Parameters for the preprocessing stage.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": true,
+          "help": "Whether to run preprocessing.",
+          "type": "bool"
+        },
+        {
+          "name": "target_presum",
+          "default": null,
+          "help": "Target presumming factor. If ``None``, no additional presumming is applied.",
+          "type": "int"
+        },
+        {
+          "name": "align_traces",
+          "default": true,
+          "help": "Whether to remove receive window opening time offsets and centre the surface return.",
+          "type": "bool"
+        },
+        {
+          "name": "n_center",
+          "default": null,
+          "help": "Sample index to centre the surface return on. Defaults to ``n_samp // 2`` if ``None``.",
+          "type": "int",
+          "default_note": "n_samp // 2"
+        },
+        {
+          "name": "save_data",
+          "default": false,
+          "help": "If True, export data after preprocessing.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state after preprocessing.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": false,
+          "help": "If True, export images after preprocessing.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "range_compression",
+      "dataclass": "RangeCompressionParams",
+      "supported": true,
+      "title": "Range Compression",
+      "help": "Parameters for range compression.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": true,
+          "help": "Whether to run range compression.",
+          "type": "bool"
+        },
+        {
+          "name": "chirp_type",
+          "default": "IDEAL",
+          "help": "Chirp type (e.g. ``\"ideal\"``, ``\"calibrated\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "IDEAL",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "filter_type",
+          "default": "MATCHED",
+          "help": "Filter type (e.g. ``\"matched\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "INVERSE",
+              "ui": true
+            },
+            {
+              "value": "MATCHED",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "window",
+          "default": "HANNING",
+          "help": "Spectral window type (e.g. ``\"hanning\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "RECTANGLE",
+              "ui": true
+            },
+            {
+              "value": "HANN",
+              "ui": true
+            },
+            {
+              "value": "HAMMING",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN-HARRIS",
+              "ui": true
+            },
+            {
+              "value": "NUTTALL",
+              "ui": true
+            },
+            {
+              "value": "BARTLETT",
+              "ui": true
+            },
+            {
+              "value": "COSINE",
+              "ui": true
+            },
+            {
+              "value": "FLATTOP",
+              "ui": true
+            },
+            {
+              "value": "TUKEY",
+              "ui": true
+            },
+            {
+              "value": "BH",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "BLACKMAN_HARRIS",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "HANNING",
+              "ui": false,
+              "alias_of": "HANN"
+            },
+            {
+              "value": "NONE",
+              "ui": false,
+              "alias_of": "RECTANGLE"
+            },
+            {
+              "value": "RAISED_COSINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            },
+            {
+              "value": "SINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            }
+          ]
+        },
+        {
+          "name": "window_alpha",
+          "default": 0.5,
+          "help": "Tukey taper fraction in [0, 1]. Only used when ``window`` is ``\"TUKEY\"``.",
+          "type": "float",
+          "visible_when": {
+            "field": "window",
+            "equals": "TUKEY"
+          }
+        },
+        {
+          "name": "save_data",
+          "default": false,
+          "help": "If True, export data after range compression.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": false,
+          "help": "If True, export images after range compression.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state after range compression.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "emi_suppression",
+      "dataclass": "EMISuppresionParams",
+      "supported": true,
+      "title": "EMI Suppression",
+      "help": "Parameters for EMI suppression.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": true,
+          "help": "Whether to run EMI suppression.",
+          "type": "bool"
+        },
+        {
+          "name": "method",
+          "default": "ADAPTIVE",
+          "help": "Detection method (``\"ADAPTIVE\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "ADAPTIVE",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "statistic",
+          "default": "MAD",
+          "help": "Local-statistic method used to form the threshold (\"MAD\" or \"STD\"). Defaults to \"MAD\".",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "MAD",
+              "ui": true
+            },
+            {
+              "value": "STD",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "k",
+          "default": 6.0,
+          "help": "Outlier threshold multiplier.",
+          "type": "float"
+        },
+        {
+          "name": "window_size",
+          "default": 129,
+          "help": "Sliding window size for local statistics (bins).",
+          "type": "int"
+        },
+        {
+          "name": "replace_strategy",
+          "default": "INTERP",
+          "help": "Replacement strategy for flagged bins (``\"INTERP\"``, ``\"ZERO\"``, or ``\"BASELINE\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "BASELINE",
+              "ui": true
+            },
+            {
+              "value": "INTERP",
+              "ui": true
+            },
+            {
+              "value": "ZERO",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "interp_pad",
+          "default": 5,
+          "help": "Number of bins to pad when interpolating across flagged samples.",
+          "type": "int",
+          "visible_when": {
+            "field": "replace_strategy",
+            "equals": "INTERP"
+          }
+        },
+        {
+          "name": "save_data",
+          "default": false,
+          "help": "If True, export data after EMI suppression.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": false,
+          "help": "If True, export images after EMI suppression.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state after EMI suppression.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "ionospheric_compensation",
+      "dataclass": "IonoCompParams",
+      "supported": true,
+      "title": "Ionospheric Compensation",
+      "help": "Parameters for ionospheric compensation.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": true,
+          "help": "Whether to run ionospheric compensation.",
+          "type": "bool"
+        },
+        {
+          "name": "method",
+          "default": "CONTRAST",
+          "help": "Compensation method (``\"CONTRAST\"`` or ``\"CAMPBELL\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "CAMPBELL",
+              "ui": true
+            },
+            {
+              "value": "CONTRAST",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "n_take",
+          "default": 65,
+          "help": "Neighbourhood width for stacking. If ``None``, a default is chosen based on the method.",
+          "type": "int"
+        },
+        {
+          "name": "campbell_n_phase",
+          "default": null,
+          "help": "Number of phase states to test (Campbell method).",
+          "type": "int",
+          "visible_when": {
+            "field": "method",
+            "equals": "CAMPBELL"
+          }
+        },
+        {
+          "name": "campbell_delta",
+          "default": null,
+          "help": "Step size for E-value generation (Campbell method).",
+          "type": "float",
+          "visible_when": {
+            "field": "method",
+            "equals": "CAMPBELL"
+          }
+        },
+        {
+          "name": "campbell_b",
+          "default": null,
+          "help": "Power-law exponent for the Campbell phase model.",
+          "type": "float",
+          "visible_when": {
+            "field": "method",
+            "equals": "CAMPBELL"
+          }
+        },
+        {
+          "name": "sgn",
+          "default": 1,
+          "help": "Sign convention for the phase exponential (-1 or +1).",
+          "type": "enum",
+          "value_type": "int",
+          "choices": [
+            {
+              "value": -1,
+              "ui": true
+            },
+            {
+              "value": 1,
+              "ui": true
+            }
+          ],
+          "visible_when": {
+            "field": "method",
+            "equals": "CAMPBELL"
+          }
+        },
+        {
+          "name": "window",
+          "default": "RECTANGLE",
+          "help": "Spectral window type (e.g. ``\"hanning\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "RECTANGLE",
+              "ui": true
+            },
+            {
+              "value": "HANN",
+              "ui": true
+            },
+            {
+              "value": "HAMMING",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN-HARRIS",
+              "ui": true
+            },
+            {
+              "value": "NUTTALL",
+              "ui": true
+            },
+            {
+              "value": "BARTLETT",
+              "ui": true
+            },
+            {
+              "value": "COSINE",
+              "ui": true
+            },
+            {
+              "value": "FLATTOP",
+              "ui": true
+            },
+            {
+              "value": "TUKEY",
+              "ui": true
+            },
+            {
+              "value": "BH",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "BLACKMAN_HARRIS",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "HANNING",
+              "ui": false,
+              "alias_of": "HANN"
+            },
+            {
+              "value": "NONE",
+              "ui": false,
+              "alias_of": "RECTANGLE"
+            },
+            {
+              "value": "RAISED_COSINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            },
+            {
+              "value": "SINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            }
+          ]
+        },
+        {
+          "name": "window_alpha",
+          "default": 0.5,
+          "help": "Tukey taper fraction in [0, 1]. Only used when ``window`` is ``\"TUKEY\"``.",
+          "type": "float",
+          "visible_when": {
+            "field": "window",
+            "equals": "TUKEY"
+          }
+        },
+        {
+          "name": "contrast_L_eq",
+          "default": 80000.0,
+          "help": "Equivalent path length scale in metres (contrast method).",
+          "type": "float",
+          "visible_when": {
+            "field": "method",
+            "equals": "CONTRAST"
+          }
+        },
+        {
+          "name": "metric",
+          "default": null,
+          "help": "Autofocus metric name (``\"L1\"``, ``\"L4\"``, ``\"ENTROPY\"``, or ``\"PEAK_SNR\"``). If ``None``, falls back to the method's built-in default (``\"PEAK_SNR\"`` for Campbell, ``\"L4\"`` for Contrast).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "ENTROPY",
+              "ui": true
+            },
+            {
+              "value": "L1",
+              "ui": true
+            },
+            {
+              "value": "L4",
+              "ui": true
+            },
+            {
+              "value": "PEAK_SNR",
+              "ui": true
+            }
+          ],
+          "default_note": "PEAK_SNR (Campbell) / L4 (Contrast)"
+        },
+        {
+          "name": "save_data",
+          "default": false,
+          "help": "If True, export data after ionospheric compensation.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": false,
+          "help": "If True, export images after ionospheric compensation.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state after ionospheric compensation.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "sar_processing",
+      "dataclass": "SARParams",
+      "supported": false,
+      "title": "SAR Processing",
+      "help": "Parameters for SAR processing.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": false,
+          "help": "Whether to run SAR processing.",
+          "type": "bool"
+        },
+        {
+          "name": "method",
+          "default": null,
+          "help": "SAR method (e.g. ``\"backscatter\"``, ``\"range_doppler\"``, ``\"omega_k\"``, ``\"unfocused\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "BACKSCATTER",
+              "ui": true
+            },
+            {
+              "value": "RANGE-DOPPLER",
+              "ui": true
+            },
+            {
+              "value": "UNFOCUSED",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "aperture_length",
+          "default": null,
+          "help": "Synthetic aperture length in traces. If ``None``, computed automatically from geometry.",
+          "type": "int",
+          "default_note": "computed from geometry"
+        },
+        {
+          "name": "lamb",
+          "default": null,
+          "help": "Effective wavelength (m) used for the azimuth matched filter and RCMC. If ``None``, falls back to ``C / RadarParams.f_cen[0]`` (the nominal center wavelength). The optimal value is instrument-specific and usually differs from the nominal center: SHARAD focuses best near 12 m (corresponding to the high-frequency band edge), LRS near 60 m (the true 5 MHz center). See the per-instrument example TOMLs for tuned values.",
+          "type": "float",
+          "default_note": "C / RadarParams.f_cen[0]"
+        },
+        {
+          "name": "os_factor",
+          "default": null,
+          "help": "Oversampling factor for the output grid.",
+          "type": "int"
+        },
+        {
+          "name": "window",
+          "default": null,
+          "help": "Spectral window type (e.g. ``\"hanning\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "RECTANGLE",
+              "ui": true
+            },
+            {
+              "value": "HANN",
+              "ui": true
+            },
+            {
+              "value": "HAMMING",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN-HARRIS",
+              "ui": true
+            },
+            {
+              "value": "NUTTALL",
+              "ui": true
+            },
+            {
+              "value": "BARTLETT",
+              "ui": true
+            },
+            {
+              "value": "COSINE",
+              "ui": true
+            },
+            {
+              "value": "FLATTOP",
+              "ui": true
+            },
+            {
+              "value": "TUKEY",
+              "ui": true
+            },
+            {
+              "value": "BH",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "BLACKMAN_HARRIS",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "HANNING",
+              "ui": false,
+              "alias_of": "HANN"
+            },
+            {
+              "value": "NONE",
+              "ui": false,
+              "alias_of": "RECTANGLE"
+            },
+            {
+              "value": "RAISED_COSINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            },
+            {
+              "value": "SINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            }
+          ]
+        },
+        {
+          "name": "window_alpha",
+          "default": null,
+          "help": "Tukey taper fraction in [0, 1]. Only used when ``window`` is ``\"TUKEY\"``.",
+          "type": "float",
+          "visible_when": {
+            "field": "window",
+            "equals": "TUKEY"
+          }
+        },
+        {
+          "name": "number_of_looks",
+          "default": null,
+          "help": "Number of looks for backscatter averaging.",
+          "type": "int",
+          "visible_when": {
+            "field": "method",
+            "equals": "BACKSCATTER"
+          }
+        },
+        {
+          "name": "remove_doppler_centroid",
+          "default": null,
+          "help": "If True, remove the Doppler centroid before processing.",
+          "type": "bool"
+        },
+        {
+          "name": "interp_cval",
+          "default": null,
+          "help": "Constant fill value for interpolation outside the data bounds.",
+          "type": "float"
+        },
+        {
+          "name": "coherent",
+          "default": null,
+          "help": "If True, average complex data preserving phase.",
+          "type": "bool"
+        },
+        {
+          "name": "sgn",
+          "default": null,
+          "help": "Sign convention for the phase exponential",
+          "type": "enum",
+          "value_type": "int",
+          "choices": [
+            {
+              "value": -1,
+              "ui": true
+            },
+            {
+              "value": 1,
+              "ui": true
+            }
+          ],
+          "default_note": "+1 (SHARAD mix-up); -1 elsewhere"
+        },
+        {
+          "name": "save_data",
+          "default": null,
+          "help": "If True, export data after SAR processing.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": null,
+          "help": "If True, export images after SAR processing.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": null,
+          "help": "If True, save HDF5 state after SAR processing.",
+          "type": "bool"
+        }
+      ],
+      "disables": [
+        {
+          "when": {
+            "field": "method",
+            "equals": "BACKSCATTER"
+          },
+          "stages": [
+            "multilooking"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "multilooking",
+      "dataclass": "MLKParams",
+      "supported": false,
+      "title": "Multilooking",
+      "help": "Parameters for multi-look processing.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": false,
+          "help": "Whether to run multilook processing.",
+          "type": "bool"
+        },
+        {
+          "name": "number_of_looks",
+          "default": null,
+          "help": "Number of looks (window length).",
+          "type": "int"
+        },
+        {
+          "name": "os_factor",
+          "default": null,
+          "help": "Oversampling factor for the output grid.",
+          "type": "int"
+        },
+        {
+          "name": "window_type",
+          "default": null,
+          "help": "Window type for multilook averaging.",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "RECTANGLE",
+              "ui": true
+            },
+            {
+              "value": "HANN",
+              "ui": true
+            },
+            {
+              "value": "HAMMING",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN",
+              "ui": true
+            },
+            {
+              "value": "BLACKMAN-HARRIS",
+              "ui": true
+            },
+            {
+              "value": "NUTTALL",
+              "ui": true
+            },
+            {
+              "value": "BARTLETT",
+              "ui": true
+            },
+            {
+              "value": "COSINE",
+              "ui": true
+            },
+            {
+              "value": "FLATTOP",
+              "ui": true
+            },
+            {
+              "value": "TUKEY",
+              "ui": true
+            },
+            {
+              "value": "BH",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "BLACKMAN_HARRIS",
+              "ui": false,
+              "alias_of": "BLACKMAN-HARRIS"
+            },
+            {
+              "value": "HANNING",
+              "ui": false,
+              "alias_of": "HANN"
+            },
+            {
+              "value": "NONE",
+              "ui": false,
+              "alias_of": "RECTANGLE"
+            },
+            {
+              "value": "RAISED_COSINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            },
+            {
+              "value": "SINE",
+              "ui": false,
+              "alias_of": "COSINE"
+            }
+          ]
+        },
+        {
+          "name": "window_alpha",
+          "default": null,
+          "help": "Tukey taper fraction in [0, 1]. Only used when ``window_type`` is ``\"TUKEY\"``.",
+          "type": "float",
+          "visible_when": {
+            "field": "window_type",
+            "equals": "TUKEY"
+          }
+        },
+        {
+          "name": "coherent",
+          "default": null,
+          "help": "If True, average complex data preserving phase.",
+          "type": "bool"
+        },
+        {
+          "name": "save_data",
+          "default": null,
+          "help": "If True, export data after multilooking.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": null,
+          "help": "If True, export images after multilooking.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": null,
+          "help": "If True, save HDF5 state after multilooking.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "clutter_simulation",
+      "dataclass": "ClutterSimParams",
+      "supported": true,
+      "title": "Clutter Simulation",
+      "help": "Parameters for clutter simulation.",
+      "fields": [
+        {
+          "name": "enabled",
+          "default": true,
+          "help": "Whether to run the clutter simulation.",
+          "type": "bool"
+        },
+        {
+          "name": "dem_path",
+          "default": null,
+          "help": "Path to a rasterio-readable DEM file.",
+          "type": "str",
+          "default_note": "supplied by user at job-load time"
+        },
+        {
+          "name": "target",
+          "default": null,
+          "help": "String of target body.",
+          "type": "str",
+          "default_note": "instrument SPICE target"
+        },
+        {
+          "name": "bin_size",
+          "default": null,
+          "help": "Sampling period of the radar in seconds.",
+          "type": "float",
+          "default_note": "RadarParams.dt"
+        },
+        {
+          "name": "n_samples",
+          "default": null,
+          "help": "Number of range samples per trace.",
+          "type": "int",
+          "default_note": "instrument-derived (n_samp or nfft)"
+        },
+        {
+          "name": "at_step",
+          "default": 1000.0,
+          "help": "Along-track facet dimension in metres.",
+          "type": "float"
+        },
+        {
+          "name": "at_dist",
+          "default": 6000.0,
+          "help": "Along-track half-extent of the grid in metres.",
+          "type": "float"
+        },
+        {
+          "name": "ct_step",
+          "default": 500.0,
+          "help": "Cross-track facet dimension in metres.",
+          "type": "float"
+        },
+        {
+          "name": "ct_dist",
+          "default": 100000.0,
+          "help": "Cross-track extent from nadir in metres.",
+          "type": "float"
+        },
+        {
+          "name": "n_center",
+          "default": null,
+          "help": "Sample index at which the ellipsoid surface return is centred. Defaults to ``n_samples // 2`` if ``None``.",
+          "type": "int",
+          "default_note": "n_samples // 2"
+        },
+        {
+          "name": "save_data",
+          "default": true,
+          "help": "If True, export data after clutter simulation.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state after clutter simulation.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": true,
+          "help": "If True, export images after clutter simulation.",
+          "type": "bool"
+        },
+        {
+          "name": "apply_curve",
+          "default": true,
+          "help": "If True, apply the simc soft-shoulder tone-mapping LUT to the cluttergram BMP after the linear max-normalize.",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "globals": [
+    {
+      "key": "general",
+      "dataclass": "ProcessingParameters",
+      "supported": true,
+      "title": "General",
+      "help": "Top-level container for all processing parameters.",
+      "fields": [
+        {
+          "name": "out_dir",
+          "default": null,
+          "help": "Output directory for all data products.",
+          "type": "str",
+          "default_note": "supplied by user at job-load time"
+        },
+        {
+          "name": "verbose",
+          "default": true,
+          "help": "If True, print progress messages during processing.",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "output_parameters",
+      "dataclass": "OutputParameters",
+      "supported": true,
+      "title": "Output Parameters",
+      "help": "Parameters controlling data export format and options.",
+      "fields": [
+        {
+          "name": "data_output_type",
+          "default": "BASIC",
+          "help": "Output format type (e.g. ``\"basic\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "BASIC",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "byte_order",
+          "default": "big",
+          "help": "Byte order for binary output (``\"big\"`` or ``\"little\"``).",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "BIG",
+              "ui": true
+            },
+            {
+              "value": "LITTLE",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "tgt_crs",
+          "default": null,
+          "help": "Target coordinate reference system string for georeferenced outputs. If ``None``, no reprojection is applied.",
+          "type": "str"
+        }
+      ]
+    },
+    {
+      "key": "plot_parameters",
+      "dataclass": "PlotParameters",
+      "supported": true,
+      "title": "Plot Parameters",
+      "help": "Parameters controlling radargram and browse image rendering.",
+      "fields": [
+        {
+          "name": "lower_percentile",
+          "default": null,
+          "help": "Lower percentile for automatic dB clipping.",
+          "type": "float"
+        },
+        {
+          "name": "upper_percentile",
+          "default": null,
+          "help": "Upper percentile for automatic dB clipping.",
+          "type": "float"
+        },
+        {
+          "name": "vmin",
+          "default": 0,
+          "help": "Explicit minimum dB value for scaling. Overrides ``lower_percentile`` when set.",
+          "type": "float"
+        },
+        {
+          "name": "vmax",
+          "default": 60,
+          "help": "Explicit maximum dB value for scaling. Overrides ``upper_percentile`` when set.",
+          "type": "float"
+        },
+        {
+          "name": "cmap",
+          "default": null,
+          "help": "Matplotlib colormap name. If ``None``, grayscale is used.",
+          "type": "enum",
+          "value_type": "str",
+          "choices": [
+            {
+              "value": "RdBu",
+              "ui": true
+            },
+            {
+              "value": "RdBu_r",
+              "ui": true
+            },
+            {
+              "value": "bwr",
+              "ui": true
+            },
+            {
+              "value": "cividis",
+              "ui": true
+            },
+            {
+              "value": "coolwarm",
+              "ui": true
+            },
+            {
+              "value": "cubehelix",
+              "ui": true
+            },
+            {
+              "value": "gray",
+              "ui": true
+            },
+            {
+              "value": "gray_r",
+              "ui": true
+            },
+            {
+              "value": "hot",
+              "ui": true
+            },
+            {
+              "value": "inferno",
+              "ui": true
+            },
+            {
+              "value": "jet",
+              "ui": true
+            },
+            {
+              "value": "magma",
+              "ui": true
+            },
+            {
+              "value": "plasma",
+              "ui": true
+            },
+            {
+              "value": "seismic",
+              "ui": true
+            },
+            {
+              "value": "turbo",
+              "ui": true
+            },
+            {
+              "value": "viridis",
+              "ui": true
+            }
+          ]
+        },
+        {
+          "name": "invert",
+          "default": false,
+          "help": "If True, invert the grayscale so that strong returns appear dark.",
+          "type": "bool"
+        },
+        {
+          "name": "buffer_km",
+          "default": 80.0,
+          "help": "Buffer distance in kilometres for DEM swath extraction around the ground track.",
+          "type": "float"
+        },
+        {
+          "name": "per_frame",
+          "default": false,
+          "help": "If True, compute vmin/vmax per column and apply the stretch column-by-column (frame-by-frame). Useful when trace-to-trace brightness varies along the orbit (e.g., MARSIS altitude swings).",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "key": "final_output",
+      "dataclass": "FinalOutputParams",
+      "supported": true,
+      "title": "Final Output",
+      "help": "Parameters for the finalize step.",
+      "fields": [
+        {
+          "name": "save_data",
+          "default": true,
+          "help": "If True, export data files.",
+          "type": "bool"
+        },
+        {
+          "name": "save_images",
+          "default": true,
+          "help": "If True, export browse images.",
+          "type": "bool"
+        },
+        {
+          "name": "save_segy",
+          "default": false,
+          "help": "If True, export SEG-Y.",
+          "type": "bool"
+        },
+        {
+          "name": "save_state",
+          "default": false,
+          "help": "If True, save HDF5 state file.",
+          "type": "bool"
+        }
+      ]
+    }
+  ]
+}

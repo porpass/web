@@ -1,0 +1,353 @@
+# Instrument and filter configuration.
+# The frontend filter panel is driven entirely from this file.
+# Never hardcode filter attributes in frontend or backend code.
+#
+# Database connection:
+#   The backend connects to a MariaDB instance using credentials supplied
+#   via environment variables (DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD).
+#
+# select_columns:
+#   Explicit column list for the SELECT clause, with table prefix.
+#   Required to avoid duplicate column name errors when parent and child
+#   tables share column names (e.g. observation_id). Extra JOIN columns
+#   (e.g. mode_name from lookup tables) must also be listed here.
+
+instruments:
+
+  - id: sharad
+    label: "SHARAD"
+    body: mars
+    instrument_id: 2
+    body_id: 1
+    child_table: sharad_observations
+    join_column: observation_id
+    file_table: sharad_files
+    extra_joins:
+      - table: sharad_modes
+        "on": "c.mode_id = sharad_modes.mode_id"
+    select_columns:
+      - o.observation_id
+      - o.native_id
+      - o.start_time
+      - o.stop_time
+      - o.duration
+      - o.length_km
+      - c.orbit_number
+      - c.observation_type
+      - c.max_roll
+      - c.start_sza
+      - c.stop_sza
+      - c.mean_sza
+      - c.l_s
+      - sharad_modes.presum
+      - bf.file_url AS browse_url
+    enabled: true
+    filters:
+      - id: observation_type
+        label: "Product Type"
+        type: dropdown
+        field: observation_type
+        options: ["EDR", "RDR", "US RDR"]
+        required: true
+      - id: ls_range
+        label: "Ls range"
+        type: range
+        field: l_s
+        min: 0
+        max: 360
+      - id: mean_sza
+        label: "Mean SZA"
+        type: range
+        field: mean_sza
+        min: 0
+        max: 180
+      - id: presum
+        label: "Presum"
+        type: dropdown
+        field: presum
+        options: [1,2,4,8,16,28,32]
+        hidden_when:
+          observation_type: ["US RDR"]
+      - id: max_roll
+        label: "Max Roll"
+        type: range
+        field: max_roll
+        min: 0
+        max: 120
+      - id: orbit_number
+        label: "Orbit #"
+        type: range
+        field: orbit_number
+        min: 0
+        max: 99999
+      - id: bbox
+        label: "Lat/Lon BBox"
+        type: bbox
+    popup_fields:
+      - { field: native_id,    label: "Product ID" }
+      - { field: orbit_number, label: "Orbit" }
+      - { field: observation_type, label: "Product Type" }
+      - { field: start_time,   label: "Start Time" }
+      - { field: stop_time,    label: "Stop Time" }
+      - { field: duration,     label: "Duration (s)" }
+      - { field: length_km,    label: "Length (km)" }
+      - { field: max_roll,     label: "Max. Roll" }
+      - { field: l_s,          label: "Ls" }
+      - { field: mean_sza,     label: "Mean SZA" }
+
+  - id: marsis
+    label: "MARSIS"
+    body: mars
+    instrument_id: 3
+    body_id: 1
+    child_table: marsis_observations
+    join_column: observation_id
+    file_table: marsis_files
+    extra_joins:
+      - table: marsis_modes
+        "on": "c.mode_id = marsis_modes.mode_id"
+      - table: marsis_states
+        "on": "c.state_id = marsis_states.state_id"
+      - table: marsis_forms
+        "on": "c.form_id = marsis_forms.form_id"
+    select_columns:
+      - o.observation_id
+      - o.native_id
+      - o.start_time
+      - o.stop_time
+      - o.duration
+      - o.length_km
+      - c.orbit_number
+      - c.observation_type
+      - c.start_altitude
+      - c.stop_altitude
+      - c.start_sza
+      - c.stop_sza
+      - c.mean_sza
+      - c.l_s
+      - marsis_modes.mode_name
+      - marsis_states.state_name
+      - marsis_forms.form_name
+      - bf.file_url AS browse_url
+    enabled: true
+    filters:
+      - id: observation_type
+        label: "Product Type"
+        type: dropdown
+        field: observation_type
+        options: ["EDR", "RDR"]
+        required: true
+      - id: ls_range
+        label: "Ls range"
+        type: range
+        field: l_s
+        min: 0
+        max: 360
+      - id: mean_sza
+        label: "Mean SZA"
+        type: range
+        field: mean_sza
+        min: 0
+        max: 180
+      - id: mode_name
+        label: "Mode"
+        type: dropdown
+        field: mode_name
+        options: ["SS1", "SS2", "SS3", "SS4", "SS5"]
+      - id: state_name
+        label: "State"
+        type: dropdown
+        field: state_name
+        options: ["TRK"] #["ACQ", "TRK"]
+        default: "TRK"
+      - id: form_name
+        label: "Form"
+        type: dropdown
+        field: form_name
+        options: ["CMP"] #["RAW", "UNC", "IND", "CMP"]
+        default: "CMP"
+      - id: orbit_number
+        label: "Orbit #"
+        type: range
+        field: orbit_number
+        min: 0
+        max: 99999
+      - id: bbox
+        label: "Lat/Lon BBox"
+        type: bbox
+    popup_fields:
+      - { field: native_id,    label: "Product ID" }
+      - { field: orbit_number, label: "Orbit" }
+      - { field: observation_type, label: "Product Type" }
+      - { field: start_time,   label: "Start Time" }
+      - { field: stop_time,    label: "Stop Time" }
+      - { field: duration,     label: "Duration (s)" }
+      - { field: length_km,    label: "Length (km)" }
+      - { field: start_altitude, label: "Start Altitude (km)" }
+      - { field: stop_altitude, label: "Stop Altitude (km)" }
+      - { field: l_s,          label: "Ls" }
+      - { field: mean_sza,     label: "Mean SZA" }
+
+  - id: marsis_phobos
+    label: "MARSIS (Phobos)"
+    body: phobos
+    instrument_id: 3
+    body_id: 4
+    child_table: marsis_observations
+    join_column: observation_id
+    file_table: marsis_files
+    extra_joins:
+      - table: marsis_modes
+        "on": "c.mode_id = marsis_modes.mode_id"
+      - table: marsis_states
+        "on": "c.state_id = marsis_states.state_id"
+      - table: marsis_forms
+        "on": "c.form_id = marsis_forms.form_id"
+    select_columns:
+      - o.observation_id
+      - o.native_id
+      - o.start_time
+      - o.stop_time
+      - o.duration
+      - o.length_km
+      - c.orbit_number
+      - c.observation_type
+      - c.start_altitude
+      - c.stop_altitude
+      - c.start_sza
+      - c.stop_sza
+      - c.mean_sza
+      - c.l_s
+      - marsis_modes.mode_name
+      - marsis_states.state_name
+      - marsis_forms.form_name
+      - bf.file_url AS browse_url
+    enabled: true
+    filters:
+      - id: observation_type
+        label: "Product Type"
+        type: dropdown
+        field: observation_type
+        options: ["EDR", "RDR"]
+        required: true
+      - id: ls_range
+        label: "Ls range"
+        type: range
+        field: l_s
+        min: 0
+        max: 360
+      - id: mean_sza
+        label: "Mean SZA"
+        type: range
+        field: mean_sza
+        min: 0
+        max: 180
+      - id: mode_name
+        label: "Mode"
+        type: dropdown
+        field: mode_name
+        options: ["SS1", "SS2", "SS3", "SS4", "SS5"]
+      - id: state_name
+        label: "State"
+        type: dropdown
+        field: state_name
+        options: ["TRK"] #["ACQ", "TRK"]
+        default: "TRK"
+      - id: form_name
+        label: "Form"
+        type: dropdown
+        field: form_name
+        options: ["CMP"] #["RAW", "UNC", "IND", "CMP"]
+        default: "CMP"
+      - id: orbit_number
+        label: "Orbit #"
+        type: range
+        field: orbit_number
+        min: 0
+        max: 99999
+      - id: bbox
+        label: "Lat/Lon BBox"
+        type: bbox
+    popup_fields:
+      - { field: native_id,    label: "Product ID" }
+      - { field: orbit_number, label: "Orbit" }
+      - { field: observation_type, label: "Product Type" }
+      - { field: start_time,   label: "Start Time" }
+      - { field: stop_time,    label: "Stop Time" }
+      - { field: duration,     label: "Duration (s)" }
+      - { field: length_km,    label: "Length (km)" }
+      - { field: l_s,          label: "Ls" }
+      - { field: mean_sza,     label: "Mean SZA" }
+
+  - id: lrs
+    label: "LRS"
+    body: moon
+    instrument_id: 1
+    body_id: 3
+    child_table: lrs_observations
+    join_column: observation_id
+    file_table: lrs_files
+    extra_joins:
+      - table: lrs_modes
+        "on": "c.mode_id = lrs_modes.mode_id"
+    select_columns:
+      - o.observation_id
+      - o.native_id
+      - o.start_time
+      - o.stop_time
+      - o.duration
+      - o.length_km
+      - c.orbit_number
+      - c.observation_type
+      - c.mean_altitude
+      - c.start_sza
+      - c.stop_sza
+      - c.mean_sza
+      - lrs_modes.mode_name
+      - bf.file_url AS browse_url
+    enabled: true
+    filters:
+      - id: observation_type
+        label: "Product Type"
+        type: dropdown
+        field: observation_type
+        options: ["EDR", "RDR"]
+        required: true
+      - id: mode_name_edr
+        label: "Mode"
+        type: dropdown
+        field: mode_name
+        options: [SA, SW]
+        hidden_when:
+          observation_type: ["RDR"]
+      - id: mode_name_rdr
+        label: "Mode"
+        type: dropdown
+        field: mode_name
+        options: [SAR05, SAR05C, SAR10, SAR10C, SAR40]
+        hidden_when:
+          observation_type: ["EDR"]
+      - id: mean_sza
+        label: "Mean SZA"
+        type: range
+        field: mean_sza
+        min: 0
+        max: 180
+      - id: mean_altitude
+        label: "Mean Altitude"
+        type: range
+        field: mean_altitude
+        min: 0
+        max: 200
+      - id: bbox
+        label: "Lat/Lon BBox"
+        type: bbox
+    popup_fields:
+      - { field: native_id,     label: "Product ID" }
+      - { field: observation_type, label: "Product Type" }
+      - { field: start_time,    label: "Start Time" }
+      - { field: stop_time,     label: "Stop Time" }
+      - { field: duration,      label: "Duration (s)" }
+      - { field: length_km,     label: "Length (km)" }
+      - { field: mean_sza,      label: "Mean SZA" }
+      - { field: mean_altitude, label: "Mean Altitude (km)" }
