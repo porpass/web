@@ -39,12 +39,6 @@ function get_db(): PDO {
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
-            // MariaDB 10.11 InnoDB R-tree spatial-index scans misreport their
-            // lock state under REPEATABLE-READ and throw ER_READ_ONLY_TRANSACTION
-            // (1207) inside ST_Intersects. READ COMMITTED sidesteps the buggy
-            // code path — the gis/ FastAPI service does the same thing.
-            PDO::MYSQL_ATTR_INIT_COMMAND =>
-                'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
         ]);
     }
     return $pdo;
