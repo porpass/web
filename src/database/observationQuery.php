@@ -537,7 +537,13 @@ class observationQuery
      */
     private function fromClause(): string
     {
-        $sql = 'FROM observations o ';
+        // MariaDB 10.11 (MDEV-26123): the InnoDB R-tree scan for ST_Intersects
+        // throws error 1207 even on read-only SELECTs, and even under READ COMMITTED
+        // (confirmed: @@SESSION.tx_isolation = READ-COMMITTED still fails). Bypassing
+        // the spatial index avoids the predicate lock. Full-table plan is acceptable
+        // at current row counts. Revisit if MariaDB fixes the R-tree locking.
+        $hint = ($this->bboxMinLat !== null) ? ' IGNORE INDEX (idx_geometry)' : '';
+        $sql  = 'FROM observations o' . $hint . ' ';
         $sql .= implode(' ', $this->joins);
         if (!empty($this->wheres)) {
             $sql .= ' WHERE ' . implode(' AND ', $this->wheres);

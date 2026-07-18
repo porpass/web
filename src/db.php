@@ -40,6 +40,7 @@ function get_db(): PDO {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ]);
+	$pdo->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
     }
     return $pdo;
 }
