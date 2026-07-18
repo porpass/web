@@ -537,11 +537,11 @@ class observationQuery
      */
     private function fromClause(): string
     {
-        // MariaDB 10.11.15+ has a regression in the InnoDB R-tree scan for
-        // ST_Intersects that throws ER_READ_ONLY_TRANSACTION (1207) even on
-        // pure SELECTs. Bypass the spatial index whenever the bbox filter is
-        // active; the full-table plan is still fast at current row counts.
-        // Remove this hint once MariaDB ships a fix on the 10.11 branch.
+        // MariaDB 10.11 (MDEV-26123): the InnoDB R-tree scan for ST_Intersects
+        // throws error 1207 even on read-only SELECTs, and even under READ COMMITTED
+        // (confirmed: @@SESSION.tx_isolation = READ-COMMITTED still fails). Bypassing
+        // the spatial index avoids the predicate lock. Full-table plan is acceptable
+        // at current row counts. Revisit if MariaDB fixes the R-tree locking.
         $hint = ($this->bboxMinLat !== null) ? ' IGNORE INDEX (idx_geometry)' : '';
         $sql  = 'FROM observations o' . $hint . ' ';
         $sql .= implode(' ', $this->joins);
