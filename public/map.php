@@ -1424,6 +1424,7 @@ open_layout('Map', $head_extra, 'page-map');
     inst.activeFilters   = buildActiveFilters(instId);
     inst.initialLoadDone = true;
     inst.filterLocked    = true;
+    updateBrowseLink();
 
     // If the user specified a manual bbox, fit the map view to it
     var userBbox = getUserBbox();
