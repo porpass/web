@@ -9,7 +9,13 @@ versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
 
-## [0.1.0a2] - 2026-07-17
+## [0.1.0-alpha.3] - 2026-07-19 
+
+### Fixed
+- Updated permissions set during processing directory creation.
+  Now creating with 0775 and re-asserts with chomod() after creation.
+
+## [0.1.0-alpha.2] - 2026-07-17
 
 ### Fixed
 
@@ -22,7 +28,7 @@ versioning consistent with the rest of the `porpass/*` organization.
   instrument state is ready rather than waiting for the vector
   count fetch to return.
 
-## [0.1.0a1] - 2026-07-16
+## [0.1.0-alpha.1] - 2026-07-16
 
 Initial public alpha.
 
