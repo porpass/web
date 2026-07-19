@@ -242,13 +242,17 @@ if ($is_post_req && $is_batch) {
                 $created_ids[] = $new_job_id;
 
                 $job_dir = rtrim($storage, '/') . "/processing/{$user_id}/{$new_job_id}";
-                if (!is_dir($job_dir) && !@mkdir($job_dir, 0755, true) && !is_dir($job_dir)) {
+                if (!is_dir($job_dir) && !@mkdir($job_dir, 0775, true) && !is_dir($job_dir)) {
                     $err = error_get_last();
                     throw new RuntimeException(
                         "Could not create job directory $job_dir: "
                         . ($err['message'] ?? 'unknown error')
                     );
                 }
+                // mkdir()'s mode is masked by the process umask, so re-assert
+                // group-write: the daemon runs as a different user in the shared
+                // porpass group and writes job.toml/run.log/manifest.json here.
+                @chmod($job_dir, 0775);
                 $written = @file_put_contents(
                     "$job_dir/config.json",
                     json_encode(
@@ -372,7 +376,7 @@ if ($is_post_req && $is_batch) {
 
             $job_dir = rtrim($storage, '/') . "/processing/{$user_id}/{$job_id_new}";
             if (!is_dir($job_dir)) {
-                if (!@mkdir($job_dir, 0755, true) && !is_dir($job_dir)) {
+                if (!@mkdir($job_dir, 0775, true) && !is_dir($job_dir)) {
                     $err = error_get_last();
                     $reason = $err['message'] ?? 'unknown error';
                     $whoami = function_exists('posix_geteuid')
@@ -385,6 +389,10 @@ if ($is_post_req && $is_batch) {
                     );
                 }
             }
+            // mkdir()'s mode is masked by the process umask, so re-assert
+            // group-write: the daemon runs as a different user in the shared
+            // porpass group and writes job.toml/run.log/manifest.json here.
+            @chmod($job_dir, 0775);
             $written = @file_put_contents(
                 "$job_dir/config.json",
                 json_encode(

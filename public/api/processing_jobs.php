@@ -151,8 +151,12 @@ try {
             // same policy as the initial-submit path in processing_configure.php.
             $new_dir = rtrim($storage, '/') . "/processing/{$user_id}/{$new_job_id}";
             if (!is_dir($new_dir)) {
-                @mkdir($new_dir, 0755, true);
+                @mkdir($new_dir, 0775, true);
             }
+            // mkdir()'s mode is masked by the process umask, so re-assert
+            // group-write: the daemon runs as a different user in the shared
+            // porpass group and writes job.toml/run.log/manifest.json here.
+            @chmod($new_dir, 0775);
             try {
                 $config_data = json_decode((string) $source['config'], true, 512, JSON_THROW_ON_ERROR);
                 @file_put_contents(
