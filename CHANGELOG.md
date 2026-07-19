@@ -9,6 +9,19 @@ versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
 
+## [0.1.0a2] - 2026-07-17
+
+### Fixed
+
+- Work around a MariaDB 10.11.15+ InnoDB R-tree regression that
+  caused bounding-box searches on `observations.php` to fail with
+  `ER_READ_ONLY_TRANSACTION (1207)`. `observationQuery` now forces
+  `IGNORE INDEX (idx_geometry)` when a bbox filter is active; the
+  hint can be removed once MariaDB patches the regression.
+- `map.php` "Browse Details" button now activates as soon as
+  instrument state is ready rather than waiting for the vector
+  count fetch to return.
+
 ## [0.1.0a1] - 2026-07-16
 
 Initial public alpha.
