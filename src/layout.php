@@ -175,6 +175,17 @@ function close_layout(): void {
         <p class="pp-footer-bottom text-center">
             PORPASS &mdash; Planetary Orbital Radar Processing and Simulation System
         </p>
+        <?php
+        $rt       = \porpass\Version::runtime();
+        $is_admin = ($_SESSION['role'] ?? '') === 'admin';
+        ?>
+        <p class="pp-footer-bottom pp-footer-small text-center">
+            Application v<?= htmlspecialchars(\porpass\Version::app()) ?>
+            &middot; GRaSP v<?= htmlspecialchars($rt['grasp']) ?>
+            <?php if ($is_admin): ?>
+                &middot; Daemon v<?= htmlspecialchars($rt['daemon']) ?>
+            <?php endif; ?>
+        </p>
     </div>
 </footer>
 
