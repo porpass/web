@@ -2,25 +2,32 @@
 /**
  * Version.php — App and runtime version helper.
  *
- * Version::app() returns the web application's own version, read from
- * composer.json. Version::runtime() returns the daemon-published runtime
+ * Version::app() returns the web application's own version, derived from
+ * the installed package version (the deployed git tag) via Composer's
+ * runtime API. Version::runtime() returns the daemon-published runtime
  * manifest at {PORPASS_STORAGE_PATH}/runtime.json, falling back to
  * 'unknown' values when the file is missing or the storage path is unset.
  */
 
 namespace porpass;
 
+use Composer\InstalledVersions;
+
 final class Version
 {
     /**
-     * Web application version, read from composer.json.
+     * Web application version, derived from the installed package version.
+     *
+     * On a deployed tag this is the release version (e.g. 0.1.0-alpha.4).
+     * On a branch checkout there is no tag to derive from, so Composer
+     * reports a dev version (e.g. dev-develop), returned as-is.
      */
     public static function app(): string
     {
         static $cached = null;
         if ($cached === null) {
-            $data   = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true);
-            $cached = $data['version'];
+            $version = InstalledVersions::getRootPackage()['pretty_version'] ?? 'unknown';
+            $cached  = ltrim($version, 'v');
         }
         return $cached;
     }
