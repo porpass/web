@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  # Requires GitHub Discussions to be enabled on porpass/web.
+  # Remove this entry if Discussions is not turned on.
+  - name: General question or feedback
+    url: https://github.com/porpass/web/discussions
+    about: For open-ended questions or workflow feedback that isn't a specific bug or feature request, please start a discussion.
+  - name: Testing the GRaSP package
+    url: mailto:grasp@psi.edu
+    about: GRaSP direct testing is coordinated separately. Email grasp@psi.edu for setup and usage instructions rather than filing an issue here.

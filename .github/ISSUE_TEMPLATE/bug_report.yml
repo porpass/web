@@ -1,0 +1,101 @@
+name: Bug Report
+description: Report something that is broken, incorrect, or not behaving as expected.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping test PORPASS! Please fill out the fields below so the issue can be reproduced and triaged quickly.
+
+        Before filing, please search existing issues to avoid duplicates. If you find a related one, add a comment there instead.
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A short, short description of the problem.
+      placeholder: e.g. Observations page throws SQL error when a Product Type is selected without an Instrument
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the application does this affect?
+      options:
+        - Website – search / browse observations
+        - Website – results / files / details
+        - GIS map
+        - Processing – choosing observations
+        - Processing – submitting jobs
+        - Processing – outputs / results
+        - Account / access
+        - Other / not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: instrument
+    attributes:
+      label: Instrument
+      description: Which instrument's data were you working with, if applicable?
+      options:
+        - Not applicable
+        - SHARAD
+        - MARSIS
+        - LRS
+        - Multiple
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, step by step, that led to the problem?
+      placeholder: |
+        1. Go to '...'
+        2. Select '...'
+        3. Click '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened? Include exact error messages if any.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      description: The browser (and version, if known) and operating system you were using.
+      placeholder: e.g. Firefox 128 on macOS 14, Chrome on Windows 11
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or logs
+      description: Drag and drop any screenshots, console output, or log snippets that help. Optional but very helpful.
+    validations:
+      required: false
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How much does this get in your way?
+      options:
+        - Low – cosmetic or minor annoyance
+        - Medium – functionality impaired but I can work around it
+        - High – blocks me from completing a task
+        - Critical – data loss, security, or system unusable
+    validations:
+      required: false
