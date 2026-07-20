@@ -9,6 +9,12 @@ versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.4] - 2026-07-20
+- Updated the CONTRIBUTING.md file to include Git Flow branching
+- Removed the version number from composer.json. Composer will now
+  get the version tag from git.
+- Updated composer lock file.
+
 ## [0.1.0-alpha.3] - 2026-07-19 
 
 ### Fixed
