@@ -8,10 +8,7 @@ project adheres to [PEP 440](https://peps.python.org/pep-0440/)
 versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
-- Updated landing page to include version numbers in the footer
-- Added Open Source section to the landing page
-- Replaced non-ASCII em-dash in email subject with a normal dash (-)
-- Implement email verification handler
+- Updated the landing page to correctly display the version numbers
 
 ## [0.1.0-alpha.7] - 2026-08-04
 - Updated landing page to include version numbers in the footer
