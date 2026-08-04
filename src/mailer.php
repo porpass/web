@@ -109,7 +109,7 @@ function send_email_verification(string $to_email, string $to_name, string $toke
     try {
         $mail = get_mailer();
         $mail->addAddress($to_email, $to_name);
-        $mail->Subject = 'PORPASS — Please Verify Your Email Address';
+        $mail->Subject = 'PORPASS - Please Verify Your Email Address';
         $mail->Body    = email_template($body);
         $mail->AltBody = "Verify your PORPASS email address:\n\n"
                        . $verify_url
