@@ -14,7 +14,7 @@
  * Observations, Map, Processing). Right side contains Documentation, the Admin
  * dropdown (admin users only), and the username/account dropdown.
  *
- * @param string $title      Page title appended to "PORPASS —" in the <title> element.
+ * @param string $title      Page title appended to "PORPASS -" in the <title> element.
  * @param string $head_extra Optional extra HTML to inject into <head> (CSS, JS, etc.).
  * @param string $body_class Optional CSS class(es) to add to the <body> element.
  */
@@ -41,7 +41,7 @@ function open_layout(string $title = 'PORPASS', string $head_extra = '', string 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PORPASS — <?= htmlspecialchars($title) ?></title>
+    <title>PORPASS - <?= htmlspecialchars($title) ?></title>
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/css/porpass.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -177,14 +177,12 @@ function close_layout(): void {
         </p>
         <?php
         $rt       = \porpass\Version::runtime();
-        $is_admin = ($_SESSION['role'] ?? '') === 'admin';
+        //$is_admin = ($_SESSION['role'] ?? '') === 'admin';
         ?>
         <p class="pp-footer-bottom pp-footer-small text-center">
             Application v<?= htmlspecialchars(\porpass\Version::app()) ?>
             &middot; GRaSP v<?= htmlspecialchars($rt['grasp']) ?>
-            <?php if ($is_admin): ?>
-                &middot; Daemon v<?= htmlspecialchars($rt['daemon']) ?>
-            <?php endif; ?>
+            &middot; Daemon v<?= htmlspecialchars($rt['daemon']) ?>
         </p>
     </div>
 </footer>
