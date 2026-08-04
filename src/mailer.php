@@ -32,11 +32,12 @@ function get_mailer(): PHPMailer {
     $mail = new PHPMailer(true);
     $mail->isSMTP();
     $mail->Host       = $_ENV['MAIL_HOST']      ?? 'smtp.example.com';
-    $mail->SMTPAuth   = true;
+    $mail->SMTPAuth   = !empty($_ENV['MAIL_USERNAME']);   // was: true (left over from dev)
+    $mail->SMTPAutoTLS = false;
     $mail->Username   = $_ENV['MAIL_USERNAME']  ?? '';
     $mail->Password   = $_ENV['MAIL_PASSWORD']  ?? '';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = (int)($_ENV['MAIL_PORT'] ?? 587);
+    $mail->SMTPSecure = '';                               // PHPMailer::ENCRYPTION_STARTTLS; (not enabled on server)
+    $mail->Port       = (int)($_ENV['MAIL_PORT'] ?? 25);
     $mail->setFrom(
         $_ENV['MAIL_FROM']      ?? 'noreply@example.com',
         $_ENV['MAIL_FROM_NAME'] ?? 'PORPASS'
