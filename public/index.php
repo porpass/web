@@ -5,6 +5,11 @@
  * Displays project information, supported instruments, and team details.
  * Authenticated users are redirected to the dashboard automatically.
  */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 require_once __DIR__ . '/../src/auth.php';
 
@@ -117,7 +122,7 @@ if (is_logged_in()) {
             </div>
 
             <div class="pp-card">
-                <span class="pp-card-tag">MEX · Mars</span>
+                <span class="pp-card-tag">MEX · Mars · Phobos</span>
                 <h3 class="pp-card-title">
                     <a href="https://mars.nasa.gov/express/mission/sc_science_marsis01.html" target="_blank" rel="noopener noreferrer">MARSIS</a>
                 </h3>
@@ -191,6 +196,59 @@ if (is_logged_in()) {
         </div>
     </section>
 
+    <!-- ── Open Source ───────────────────────────────────────────────────── -->
+    <section class="pp-section" id="applications">
+        <p class="pp-section-label">Open Source</p>
+        <h2 class="pp-section-title">Open Source for Open Science</h2>
+        <p class="pp-lead">
+            The entire PORPASS application stack is fully open source and available
+            via the <a href="https://github.com/porpass" target="_blank" rel="noopener noreferrer">PORPASS GitHub organization</a>. If you wish to contribute, please review the
+            documentation under each repository.</p> 
+        <div class="pp-card-grid">
+            <div class="pp-card pp-card--app">
+                <h3 class="pp-card-title"><a href="https://github.com/porpass/web" target="_blank" rel="noopener noreferrer">porpass/web</a></h3>
+                <p class="pp-card-body">
+		    Web frontend of PORPASS, the Planetary Orbital Radar Processing
+                    and Simulation System. Browse and search SHARAD, MARSIS, and LRS
+		    observations, view them on an interactive map, and queue
+		    processing jobs for the porpass/daemon. Built in PHP + MariaDB +
+		    OpenLayers at the Planetary Science Institute.
+                </p>
+            </div>
+
+            <div class="pp-card pp-card--app">
+                <h3 class="pp-card-title"><a href="https://github.com/porpass/db" target="_blank" rel="noopener noreferrer">porpass/db</a></h3>
+                <p class="pp-card-body">
+		    The PORPASS database: schema/table definitions plus tooling to
+		    ingest radar sounder observations from PDS/DARTS archives,
+		    compute SPICE geometry, and maintain the catalog. The shared
+		    data layer behind porpass-web and porpass-daemon.
+                </p>
+            </div>
+
+            <div class="pp-card pp-card--app">
+                <h3 class="pp-card-title"><a href="https://github.com/porpass/daemon" target="_blank" rel="noopener noreferrer">porpass/daemon</a></h3>
+                <p class="pp-card-body">
+		    Claims queued GRaSP planetary-radar jobs from the PORPASS database,
+		    fetches their inputs, runs GRaSP, and writes products + a manifest
+		    to shared storage. Decoupled from the web app via frozen contracts
+		    + a shared filesystem.
+                </p>
+            </div>
+
+            <div class="pp-card pp-card--app">
+                <h3 class="pp-card-title"><a href="https://github.com/porpass/grasp" target="_blank" rel="noopener noreferrer">porpass/grasp</a></h3>
+                <p class="pp-card-body">
+		    GRaSP is a Python library for processing planetary radar sounder
+  		    data. It runs as a standalone package on your own machine, and
+	 	    also serves as the processing backend for the PORPASS web
+		    application.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
     <!-- ── Team ───────────────────────────────────────────────────────────── -->
     <section class="pp-section" id="team">
         <p class="pp-section-label">People</p>
@@ -253,6 +311,14 @@ if (is_logged_in()) {
         <p class="pp-footer-bottom text-center">
             PORPASS &mdash; Planetary Orbital Radar Processing and Simulation System
         </p>
+	<?php
+	$rt	= \porpass\Version::runtime();
+	?>
+	<p class="pp-footer-bottom pp-footer-small text-center">
+            Application v<?= htmlspecialchars(\porpass\Version::app()) ?>
+            &middot; GRaSP v<?= htmlspecialchars($rt['grasp']) ?>
+            &middot; Daemon v<?= htmlspecialchars($rt['daemon']) ?>
+	</p>
     </div>
 </footer>
 
