@@ -38,3 +38,8 @@ build/
 venv/
 **/.ipynb_checkpoints
 *.ipynb
+
+# Vim swap/backup/undo files
+*~
+*.sw?
+.*.un~
