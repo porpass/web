@@ -8,6 +8,8 @@ project adheres to [PEP 440](https://peps.python.org/pep-0440/)
 versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
+- Implement email verification handler
+- Replaced non-ASCII em-dash in email subject with a normal dash (-)
 
 ## [0.1.0-alpha.6] - 2026-08-04
 - Fix outbound mail for the plaintext internal SMTP relay
