@@ -13,6 +13,12 @@ versioning consistent with the rest of the `porpass/*` organization.
 - Replaced non-ASCII em-dash in email subject with a normal dash (-)
 - Implement email verification handler
 
+## [0.1.0-alpha.7] - 2026-08-04
+- Updated landing page to include version numbers in the footer
+- Added Open Source section to the landing page
+- Replaced non-ASCII em-dash in email subject with a normal dash (-)
+- Implement email verification handler
+
 ## [0.1.0-alpha.6] - 2026-08-04
 - Fix outbound mail for the plaintext internal SMTP relay
 - Also ignore vim backup/undo artifacts in .gitignore.
