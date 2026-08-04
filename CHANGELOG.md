@@ -8,6 +8,8 @@ project adheres to [PEP 440](https://peps.python.org/pep-0440/)
 versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
+
+## [0.1.0-alpha.8] - 2026-08-04
 - Updated the landing page to correctly display the version numbers
 
 ## [0.1.0-alpha.7] - 2026-08-04
