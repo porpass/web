@@ -9,6 +9,13 @@ versioning consistent with the rest of the `porpass/*` organization.
 
 ## [Unreleased]
 
+## [0.1.0-alpha.9] - 2026-08-12
+- Notify admins by email when a new user registration request is submitted
+- Added custom 403/404/500 error pages, with admin-only debug detail
+  (exception message, SQL error, trace) for uncaught errors
+- Admins can now view and manage all users' processing jobs (list,
+  detail, cancel/rerun/delete results) from a new Admin > Processing page
+
 ## [0.1.0-alpha.8] - 2026-08-04
 - Updated the landing page to correctly display the version numbers
 

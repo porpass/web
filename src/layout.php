@@ -114,6 +114,7 @@ function open_layout(string $title = 'PORPASS', string $head_extra = '', string 
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/admin/admin_dashboard.php">Analytics Dashboard</a></li>
                         <li><a class="dropdown-item" href="/admin/users.php">Manage Users</a></li>
+                        <li><a class="dropdown-item" href="/admin/processing.php">Processing</a></li>
                         <li><a class="dropdown-item" href="/admin/instruments.php">Manage Instruments</a></li>
                         <li><a class="dropdown-item" href="/admin/bodies.php">Manage Bodies</a></li>
                         <li><a class="dropdown-item" href="/admin/institutions.php">Manage Institutions</a></li>
