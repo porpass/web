@@ -139,6 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Send verification email
         $name = trim($first_name . ' ' . $last_name);
         send_email_verification($email, $name, $raw_token);
+        send_admin_registration_notification($name, $email);
 
         $success = true;
         $old     = [];
