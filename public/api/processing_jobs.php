@@ -120,7 +120,11 @@ try {
                 exit;
             }
 
-            $source = $jobs->get($job_id, $user_id);
+            // Admins may rerun any user's job on their behalf; owners only
+            // their own. Same resolve-then-use-owner-id shape as 'cancel'.
+            $source = $is_admin
+                ? $jobs->getForAdmin($job_id)
+                : $jobs->get($job_id, $user_id);
             if ($source === null) {
                 http_response_code(404);
                 echo json_encode(['ok' => false, 'error' => 'Job not found']);
@@ -135,6 +139,8 @@ try {
                 exit;
             }
 
+            $owner_id = (int) $source['user_id'];
+
             $storage = $_ENV['PORPASS_STORAGE_PATH'] ?? '';
             if ($storage === '') {
                 http_response_code(500);
@@ -145,11 +151,11 @@ try {
                 exit;
             }
 
-            $new_job_id = $jobs->createRerun($job_id, $user_id);
+            $new_job_id = $jobs->createRerun($job_id, $owner_id);
 
             // Materialise the new job's directory + config.json using the
             // same policy as the initial-submit path in processing_configure.php.
-            $new_dir = rtrim($storage, '/') . "/processing/{$user_id}/{$new_job_id}";
+            $new_dir = rtrim($storage, '/') . "/processing/{$owner_id}/{$new_job_id}";
             if (!is_dir($new_dir)) {
                 @mkdir($new_dir, 0775, true);
             }
@@ -191,7 +197,11 @@ try {
                 exit;
             }
 
-            $job = $jobs->get($job_id, $user_id);
+            // Admins may delete results for any user's job; owners only
+            // their own. Same resolve-then-use-owner-id shape as 'cancel'.
+            $job = $is_admin
+                ? $jobs->getForAdmin($job_id)
+                : $jobs->get($job_id, $user_id);
             if ($job === null) {
                 http_response_code(404);
                 echo json_encode(['ok' => false, 'error' => 'Job not found']);
@@ -214,13 +224,15 @@ try {
                 exit;
             }
 
+            $owner_id = (int) $job['user_id'];
+
             // Reclaim on disk (best-effort) then flip the DB flag.
             $unlinked = 0;
             $manifest = Manifest::forJob($job);
             if ($manifest !== null) {
                 $unlinked = $manifest->reclaim();
             }
-            $flipped = $jobs->markResultsDeleted($job_id, $user_id);
+            $flipped = $jobs->markResultsDeleted($job_id, $owner_id);
 
             echo json_encode([
                 'ok'                => true,

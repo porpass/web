@@ -169,6 +169,85 @@ class JobRepository
     }
 
     /**
+     * List jobs across all users, newest first, for the admin processing
+     * view. Optionally filtered by exact status and/or a search string
+     * matched against the owning user's username, email, or full name.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function listForAdmin(int $limit, int $offset, ?string $status = null, ?string $search = null): array
+    {
+        $limit  = max(1, min($limit, 200));
+        $offset = max(0, $offset);
+
+        [$where, $params] = $this->adminListFilter($status, $search);
+
+        $stmt = $this->pdo->prepare(
+            "SELECT pj.job_id, pj.batch_id, pj.user_id, pj.status,
+                    pj.submitted_at, pj.started_at, pj.completed_at,
+                    pj.error_message, pj.results_deleted,
+                    o.native_id,
+                    i.instrument_abbr,
+                    b.body_name,
+                    u.username, u.email
+             FROM processing_jobs pj
+             JOIN observations o ON pj.observation_id = o.observation_id
+             JOIN instruments  i ON o.instrument_id   = i.instrument_id
+             JOIN bodies       b ON o.body_id         = b.body_id
+             JOIN users        u ON pj.user_id        = u.user_id
+             $where
+             ORDER BY pj.submitted_at DESC
+             LIMIT $limit OFFSET $offset"
+        );
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Count jobs across all users matching the same filters as
+     * listForAdmin(), for pagination controls.
+     */
+    public function countForAdmin(?string $status = null, ?string $search = null): int
+    {
+        [$where, $params] = $this->adminListFilter($status, $search);
+
+        $stmt = $this->pdo->prepare(
+            "SELECT COUNT(*)
+             FROM processing_jobs pj
+             JOIN users u ON pj.user_id = u.user_id
+             $where"
+        );
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Shared WHERE clause + params for listForAdmin()/countForAdmin().
+     *
+     * @return array{0: string, 1: array<int, string>}
+     */
+    private function adminListFilter(?string $status, ?string $search): array
+    {
+        $clauses = [];
+        $params  = [];
+
+        if ($status !== null && $status !== '') {
+            $clauses[] = 'pj.status = ?';
+            $params[]  = $status;
+        }
+        if ($search !== null && $search !== '') {
+            $clauses[] = "(u.username LIKE ? OR u.email LIKE ? OR CONCAT(u.first_name, ' ', u.last_name) LIKE ?)";
+            $like      = '%' . $search . '%';
+            $params[]  = $like;
+            $params[]  = $like;
+            $params[]  = $like;
+        }
+
+        $where = $clauses === [] ? '' : 'WHERE ' . implode(' AND ', $clauses);
+        return [$where, $params];
+    }
+
+    /**
      * Cancel a job that has not yet been claimed by the daemon.
      * Refuses (returns false) if the job is already running or finished.
      */

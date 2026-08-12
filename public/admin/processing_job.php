@@ -1,45 +1,45 @@
 <?php
 /**
- * processing_job.php — Detail view for a single processing job.
+ * processing_job.php — Admin: detail view for a single user's processing job.
  *
- * Shows the observation summary, the sparse Contract B config, the manifest
- * of produced files (with per-file view/download links), a tail of run.log,
- * and status-appropriate actions (Edit / Delete for queued, Rerun / Delete
- * results for succeeded / failed).
- *
- * Reads state entirely from the DB + disk; nothing is polled here. Once the
- * daemon exists and status polling ships, this page will grow a tiny JS
- * interval that refreshes badges without a reload.
+ * Mirrors public/processing_job.php (observation summary, config, results
+ * manifest, run.log tail) but is admin-scoped: it can open any user's job,
+ * shows who owns it, and omits the owner-only Edit action. Cancel / Rerun /
+ * Delete results reuse the same /api/processing_jobs.php endpoint the owner
+ * page uses — the admin's session role unlocks the cross-user path there.
  */
 
-require_once __DIR__ . '/../src/auth.php';
-require_once __DIR__ . '/../src/db.php';
-require_once __DIR__ . '/../src/layout.php';
-require_once __DIR__ . '/../src/processing/render_helpers.php';
+require_once __DIR__ . '/../../src/auth.php';
+require_once __DIR__ . '/../../src/db.php';
+require_once __DIR__ . '/../../src/layout.php';
+require_once __DIR__ . '/../../src/processing/render_helpers.php';
 
 use porpass\processing\JobRepository;
 use porpass\processing\Manifest;
 
 session_start_secure();
-require_login();
+require_admin();
 
-$db      = get_db();
-$user_id = (int) $_SESSION['user_id'];
-$job_id  = (int) ($_GET['id'] ?? 0);
+$db     = get_db();
+$job_id = (int) ($_GET['id'] ?? 0);
 
 if ($job_id <= 0) {
     $_SESSION['flash'] = ['kind' => 'danger', 'msg' => 'Missing job id.'];
-    header('Location: /processing.php');
+    header('Location: /admin/processing.php');
     exit;
 }
 
 $jobs = new JobRepository($db);
-$job  = $jobs->get($job_id, $user_id);
+$job  = $jobs->getForAdmin($job_id);
 if ($job === null) {
     $_SESSION['flash'] = ['kind' => 'danger', 'msg' => 'Job not found.'];
-    header('Location: /processing.php');
+    header('Location: /admin/processing.php');
     exit;
 }
+
+$owner_stmt = $db->prepare('SELECT username, email FROM users WHERE user_id = ?');
+$owner_stmt->execute([(int) $job['user_id']]);
+$owner = $owner_stmt->fetch();
 
 // Decode the config; a malformed config is unusual but we handle it
 // gracefully so the page can still render other info + actions.
@@ -52,11 +52,7 @@ try {
 
 $manifest = Manifest::forJob($job);
 
-// Resolved parameters (job.toml). Written by the daemon at claim time as a
-// frozen provenance snapshot of what GRaSP actually ran with. Only shown
-// once a job has left the `queued` state; the daemon hasn't touched a
-// queued job's directory yet.
-$toml_path    = null;
+// Resolved parameters (job.toml). Written by the daemon at claim time.
 $toml_content = null;
 if ($job['status'] !== 'queued' && !empty($job['output_dir'])) {
     $toml_path = rtrim((string) $job['output_dir'], '/') . '/job.toml';
@@ -67,7 +63,6 @@ if ($job['status'] !== 'queued' && !empty($job['output_dir'])) {
 
 // run.log tail (last ~500 lines). Empty until the daemon writes it.
 $log_tail = null;
-$log_path = null;
 if (!empty($job['output_dir'])) {
     $log_path = rtrim((string) $job['output_dir'], '/') . '/run.log';
     if (is_file($log_path) && is_readable($log_path)) {
@@ -118,7 +113,7 @@ open_layout("Job #{$job_id}", $head_extra);
 
 <div class="pp-page-title-row">
     <div>
-        <p class="pp-section-label" style="margin-bottom: 0.25rem;">Processing</p>
+        <p class="pp-section-label" style="margin-bottom: 0.25rem;">Admin &middot; Processing</p>
         <h1 class="pp-page-title-large">
             Job #<?= (int) $job_id ?>
             <span class="pp-badge <?= pp_hub_job_badge_class($job['status'], !empty($job['results_deleted'])) ?>"
@@ -134,14 +129,23 @@ open_layout("Job #{$job_id}", $head_extra);
         </h1>
     </div>
     <div class="pp-page-title-row-actions">
-        <a href="/processing.php" class="pp-btn pp-btn-outline">← Back to jobs</a>
+        <a href="/admin/processing.php" class="pp-btn pp-btn-outline">← Back to all jobs</a>
     </div>
 </div>
 
-<!-- ── Observation summary ────────────────────────────────────────────── -->
+<!-- ── Owner + observation summary ────────────────────────────────────── -->
 <div class="pp-panel pp-panel--flush" style="margin-bottom: 1.5rem;">
     <div class="pp-panel-body">
         <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div>
+                <p class="pp-section-label" style="margin: 0;">Owner</p>
+                <p style="margin: 0.25rem 0 0;">
+                    <?= $owner ? htmlspecialchars($owner['username']) : 'Unknown' ?>
+                    <?php if ($owner): ?>
+                        <br><span style="color: var(--text-muted); font-size: 0.85rem;"><?= htmlspecialchars($owner['email']) ?></span>
+                    <?php endif; ?>
+                </p>
+            </div>
             <div>
                 <p class="pp-section-label" style="margin: 0;">Observation</p>
                 <p style="margin: 0.25rem 0 0;"><code><?= htmlspecialchars($job['native_id']) ?></code></p>
@@ -162,7 +166,7 @@ open_layout("Job #{$job_id}", $head_extra);
             <div>
                 <p class="pp-section-label" style="margin: 0;">Rerun of</p>
                 <p style="margin: 0.25rem 0 0;">
-                    <a href="/processing_job.php?id=<?= (int) $job['rerun_of'] ?>">
+                    <a href="/admin/processing_job.php?id=<?= (int) $job['rerun_of'] ?>">
                         Job #<?= (int) $job['rerun_of'] ?>
                     </a>
                 </p>
@@ -202,7 +206,7 @@ open_layout("Job #{$job_id}", $head_extra);
             <?php if ($toml_content !== null): ?>
                 · Resolved parameters below (from <code>job.toml</code>).
             <?php else: ?>
-                · Your submitted choices — full parameters are resolved when the job is claimed.
+                · Submitted choices — full parameters are resolved when the job is claimed.
             <?php endif; ?>
         <?php endif; ?>
     </p>
@@ -310,18 +314,7 @@ open_layout("Job #{$job_id}", $head_extra);
 <!-- ── Actions ────────────────────────────────────────────────────────── -->
 <div style="display: flex; gap: 0.5rem; justify-content: flex-end;
             margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;">
-    <?php if ($job['status'] === 'queued'): ?>
-        <a href="/processing_configure.php?job_id=<?= (int) $job_id ?>"
-           class="pp-btn pp-btn-outline">Edit</a>
-        <button type="button" class="pp-btn pp-btn-outline"
-                onclick="cancelJob(<?= (int) $job_id ?>)">
-            Cancel
-        </button>
-        <button type="button" class="pp-btn pp-btn-danger"
-                onclick="deleteQueuedJob(<?= (int) $job_id ?>)">
-            Delete
-        </button>
-    <?php elseif ($job['status'] === 'running'): ?>
+    <?php if (in_array($job['status'], ['queued', 'running'], true)): ?>
         <button type="button" class="pp-btn pp-btn-outline"
                 onclick="cancelJob(<?= (int) $job_id ?>)">
             Cancel
@@ -353,23 +346,13 @@ async function callJobsApi(action, jobId, confirmMsg) {
     return j;
 }
 
-async function deleteQueuedJob(jobId) {
-    try {
-        const j = await callJobsApi(
-            'delete', jobId,
-            'Delete queued job #' + jobId + '? Its config will be removed.'
-        );
-        if (j) location.href = '/processing.php';
-    } catch (e) { alert('Delete failed: ' + e.message); }
-}
-
 async function rerunJob(jobId) {
     try {
         const j = await callJobsApi(
             'rerun', jobId,
-            'Rerun job #' + jobId + '? A new queued job will be created with the same config.'
+            'Rerun job #' + jobId + ' on behalf of this user? A new queued job will be created with the same config.'
         );
-        if (j) location.href = '/processing_job.php?id=' + j.job_id;
+        if (j) location.href = '/admin/processing_job.php?id=' + j.job_id;
     } catch (e) { alert('Rerun failed: ' + e.message); }
 }
 
@@ -390,8 +373,6 @@ async function cancelJob(jobId) {
             'Cancel this job?\n\nA queued job is cancelled immediately. A running job may take a few seconds to stop.'
         );
         if (!j) return;
-        // If the daemon still owns the job, we've only signalled it; the row
-        // won't show "cancelled" until the daemon flips it in a few seconds.
         if (j.note) alert(j.note);
         location.reload();
     } catch (e) { alert('Cancel failed: ' + e.message); }
