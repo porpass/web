@@ -15,11 +15,14 @@ $dotenv->load();
 /**
  * Apply debugging to page if $_ENV['APP_ENV'] === 'development'
  */
-if (in_array($_ENV['APP_ENV'], ['development-local', 'development'])) { 
+if (in_array($_ENV['APP_ENV'], ['development-local', 'development'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
+
+require_once __DIR__ . '/errors.php';
+install_error_handlers();
 
 /**
  * Returns a singleton PDO connection to the PORPASS database.
