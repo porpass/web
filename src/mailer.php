@@ -14,6 +14,7 @@
  *   MAIL_FROM      — From address (e.g. noreply@porpass.psi.edu)
  *   MAIL_FROM_NAME — From name (e.g. PORPASS)
  *   APP_URL        — Base URL of the application (e.g. https://porpass.psi.edu)
+ *   ADMIN_NOTIFY_EMAIL — Recipient for admin notifications (e.g. porpass-admin@psi.edu)
  */
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -118,6 +119,53 @@ function send_email_verification(string $to_email, string $to_name, string $toke
         return true;
     } catch (Exception $e) {
         error_log('PHPMailer error (verify): ' . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Notify PORPASS admins that a new account request was submitted.
+ *
+ * @param string $user_name  Display name of the requesting user.
+ * @param string $user_email Email address of the requesting user.
+ *
+ * @return bool True if the email was sent successfully, false otherwise.
+ */
+function send_admin_registration_notification(string $user_name, string $user_email): bool {
+    $base_url  = rtrim($_ENV['APP_URL'] ?? 'http://porpass.local', '/');
+    $admin_url = $base_url . '/admin/users.php';
+    $admin_to  = $_ENV['ADMIN_NOTIFY_EMAIL'] ?? '';
+
+    if ($admin_to === '') {
+        error_log('send_admin_registration_notification: ADMIN_NOTIFY_EMAIL not set');
+        return false;
+    }
+
+    $body = '
+        <p>A new PORPASS account request was submitted.</p>
+        <p><strong>Name:</strong> ' . htmlspecialchars($user_name) . '<br>
+           <strong>Email:</strong> ' . htmlspecialchars($user_email) . '</p>
+        <p>The account requires email verification by the user and approval
+           by an administrator before it can be used.</p>
+        <p style="margin:24px 0;">
+            <a href="' . $admin_url . '"
+               style="background:#0d6efd;color:#fff;padding:10px 20px;
+                      text-decoration:none;border-radius:4px;">
+                Review Pending Users
+            </a>
+        </p>';
+
+    try {
+        $mail = get_mailer();
+        $mail->addAddress($admin_to);
+        $mail->Subject = 'PORPASS — New Account Request: ' . $user_name;
+        $mail->Body    = email_template($body);
+        $mail->AltBody = "New PORPASS account request from $user_name <$user_email>.\n\n"
+                       . "Review at: $admin_url";
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log('PHPMailer error (admin notify): ' . $e->getMessage());
         return false;
     }
 }
