@@ -158,7 +158,7 @@ function send_admin_registration_notification(string $user_name, string $user_em
     try {
         $mail = get_mailer();
         $mail->addAddress($admin_to);
-        $mail->Subject = 'PORPASS — New Account Request: ' . $user_name;
+        $mail->Subject = 'New Account Request: ' . $user_name;
         $mail->Body    = email_template($body);
         $mail->AltBody = "New PORPASS account request from $user_name <$user_email>.\n\n"
                        . "Review at: $admin_url";
