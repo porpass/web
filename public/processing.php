@@ -12,6 +12,7 @@
 require_once __DIR__ . '/../src/auth.php';
 require_once __DIR__ . '/../src/db.php';
 require_once __DIR__ . '/../src/layout.php';
+require_once __DIR__ . '/../src/processing/render_helpers.php';
 
 use porpass\processing\JobRepository;
 use porpass\processing\QueueRepository;
@@ -29,23 +30,6 @@ $jobs        = (new JobRepository($db))->listForUser($user_id, 50);
 // Flash message (set by processing_configure.php on submit).
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
-
-// Status → badge class mapping. When results have been reclaimed the status
-// badge is muted regardless of the underlying value, so the "succeeded" audit
-// fact no longer visually reads as "everything is retrievable".
-// 'cancelled' is a neutral terminal state — muted, distinct from the red
-// failure signal.
-function pp_hub_job_badge_class(string $status, bool $results_deleted = false): string {
-    if ($results_deleted) return 'pp-badge-muted';
-    return match($status) {
-        'succeeded' => 'pp-badge-success',
-        'running'   => 'pp-badge-info',
-        'queued'    => 'pp-badge-warning',
-        'failed'    => 'pp-badge-danger',
-        'cancelled' => 'pp-badge-muted',
-        default     => 'pp-badge-muted',
-    };
-}
 
 open_layout('Processing');
 ?>

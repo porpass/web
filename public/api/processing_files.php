@@ -17,7 +17,7 @@
  *
  * Refuses when:
  *   - user is not signed in
- *   - job is not owned by the caller
+ *   - job is not owned by the caller (admins may access any job's files)
  *   - job's results have been reclaimed (results_deleted=1)
  *   - the manifest entry is marked deleted
  *   - the requested file is not on the manifest
@@ -47,16 +47,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     abort(405, 'Method not allowed');
 }
 
-$user_id = (int) $_SESSION['user_id'];
-$job_id  = (int) ($_GET['job_id'] ?? 0);
-$file    = (string) ($_GET['file'] ?? '');
+$user_id  = (int) $_SESSION['user_id'];
+$is_admin = ($_SESSION['role'] ?? '') === 'admin';
+$job_id   = (int) ($_GET['job_id'] ?? 0);
+$file     = (string) ($_GET['file'] ?? '');
 
 if ($job_id <= 0 || $file === '') {
     abort(400, 'job_id and file are required');
 }
 
 $jobs = new JobRepository(get_db());
-$job  = $jobs->get($job_id, $user_id);
+// Admins may download any user's job files; owners only their own. Same
+// resolve-via-getForAdmin() shape used by the admin-aware actions in
+// processing_jobs.php.
+$job = $is_admin
+    ? $jobs->getForAdmin($job_id)
+    : $jobs->get($job_id, $user_id);
 if ($job === null) {
     abort(404, 'Job not found');
 }
